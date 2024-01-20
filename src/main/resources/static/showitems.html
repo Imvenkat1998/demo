@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Management System</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        
+        .container {
+
+            max-width: 800px;
+            margin: auto;
+            margin-top: 0;
+        }
+
+        .jumbotron {
+            background-color:  rgb(128, 145, 158);;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.0em;
+            font-weight: bold;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pagetitle {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            margin-block-start: 0.67em;
+            margin-block-end: 0.67em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div class="topnav">
+        <p>Item Management</p>
+        <div class="topnav-centered">
+            <a href="index.html">Home</a>
+            <a href="CreateItem.html">Create Items</a>
+            <a class="active" href="showitems.html">Show Items</a>
+        </div>
+        <div class="topnav-right">
+            <a class="active" href="registeruser.html">Register</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>List of Items</h1>
+            <hr class="my-4">
+            <!-- Loading Spinner -->
+            <div class="spinner-border text-light" role="status" id="loadingSpinner">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Item List Section -->
+        <div id="itemListSection" style="display: none;">
+            <h2>Item List</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Stock Quantity</th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+                    <!-- Dynamic content will be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function loaditems() {
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+
+            // Simulate an asynchronous task (e.g., fetching data from the server)
+            fetch('getitems') // Replace with your actual servlet endpoint
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Hide loading spinner when the response is received
+                    document.getElementById('loadingSpinner').style.display = 'none';
+
+                    // Display the item list section
+                    document.getElementById('itemListSection').style.display = 'block';
+
+                    // Get the table body
+                    const tableBody = document.getElementById('itemTableBody');
+                    tableBody.innerHTML = '';
+
+                    // Populate the table with dynamic content
+                    data.forEach(item => {
+                        const row = tableBody.insertRow();
+                        row.insertCell(0).textContent = item.ITEM_CODE;
+                        row.insertCell(1).textContent = item.DESCRIPTION;
+                        row.insertCell(2).textContent = item.Price;
+                        row.insertCell(3).textContent = item.STOCK_QUANTITY;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Hide loading spinner in case of an error
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                });
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            loaditems();
+        });
+    </script>
+
+</body>
+
+</html>

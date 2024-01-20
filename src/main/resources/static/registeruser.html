@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Management</title>
+  <link href="styles.css" rel="stylesheet">
+  <style>
+
+    form {
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    h2 {
+      text-align: center;
+    }
+   
+  </style>
+</head>
+
+<body>
+  <div class="topnav">
+    <p>Item Management</p>
+    <div class="topnav-centered">
+      <a href="index.html">Home</a>
+      <a href="CreateItem.html">Create Items</a>
+      <a href="showitems.html">Show Items</a>
+    </div>
+    <div class="topnav-right">
+      <a class="active" href="registeruser.html">Register</a>
+    </div>
+  </div>
+
+
+  <form id="userform">
+    <h2>Create User</h2>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="role">Role:</label>
+    <select id="role" name="role" required>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit" onclick="submitUser()">Register</button>
+    <div class="success"id="success">
+
+    </div>
+  </form>
+  <script>
+    function submitUser(){
+      var formdata=new FormData(document.getElementById("userform"));
+      var successdiv=document.getElementById("success");
+      fetch("/submituser",{method:'POST',body:formdata}).then(response=>response.json())
+      .then(data=>{
+        successdiv.innerText=response;
+      })
+    }
+  </script>
+</body>
+
+</html>

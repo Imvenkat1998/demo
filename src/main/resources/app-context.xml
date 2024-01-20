@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="inject" class="com.example.demo.InjectDemo"
+ p:message="Hi this is sample Message"
+ p:age="25"/> 
+ <bean id="lyrics" class="com.example.demo.Lyrics"></bean>
+ <bean id="injectCollection" class="com.example.demo.CollectionInject">
+ <property name="set">
+ <set>
+ <value>This is the sample text </value>
+ <ref bean="lyrics"></ref>
+ </set>
+ </property>
+ </bean>
+ </beans>
+
+

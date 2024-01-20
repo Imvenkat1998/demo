@@ -1,0 +1,4240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                      https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+  version="5.0">
+
+  <!-- ======================== Introduction ============================== -->
+  <!-- This document defines default values for *all* web applications      -->
+  <!-- loaded into this instance of Tomcat.  As each application is         -->
+  <!-- deployed, this file is processed, followed by the                    -->
+  <!-- "/WEB-INF/web.xml" deployment descriptor from your own               -->
+  <!-- applications.                                                        -->
+  <!--                                                                      -->
+  <!-- WARNING:  Do not configure application-specific resources here!      -->
+  <!-- They should go in the "/WEB-INF/web.xml" file in your application.   -->
+
+
+  <!-- Set the default request and response character encodings to UTF-8.   -->
+  <request-character-encoding>UTF-8</request-character-encoding>
+  <response-character-encoding>UTF-8</response-character-encoding>
+
+
+  <!-- ================== Built In Servlet Definitions ==================== -->
+
+
+  <!-- The default servlet for all web applications, that serves static     -->
+  <!-- resources.  It processes all requests that are not mapped to other   -->
+  <!-- servlets with servlet mappings (defined either here or in your own   -->
+  <!-- web.xml file).  This servlet supports the following initialization   -->
+  <!-- parameters (default values are in square brackets):                  -->
+  <!--                                                                      -->
+  <!--   debug               Debugging detail level for messages logged     -->
+  <!--                       by this servlet. Useful values are 0, 1, and   -->
+  <!--                       11 where higher values mean more detail. [0]   -->
+  <!--                                                                      -->
+  <!--   fileEncoding        Encoding to be used to read static resources   -->
+  <!--                       [platform default]                             -->
+  <!--                                                                      -->
+  <!--   useBomIfPresent     If a static file contains a byte order mark    -->
+  <!--                       (BOM), should this be used to determine the    -->
+  <!--                       file encoding in preference to fileEncoding.   -->
+  <!--                       [true]                                         -->
+  <!--                                                                      -->
+  <!--   input               Input buffer size (in bytes) when reading      -->
+  <!--                       resources to be served.  [2048]                -->
+  <!--                                                                      -->
+  <!--   listings            Should directory listings be produced if there -->
+  <!--                       is no welcome file in this directory?  [false] -->
+  <!--                       WARNING: Listings for directories with many    -->
+  <!--                       entries can be slow and may consume            -->
+  <!--                       significant proportions of server resources.   -->
+  <!--                                                                      -->
+  <!--   output              Output buffer size (in bytes) when writing     -->
+  <!--                       resources to be served.  [2048]                -->
+  <!--                                                                      -->
+  <!--   readonly            Is this context "read only", so HTTP           -->
+  <!--                       commands like PUT and DELETE are               -->
+  <!--                       rejected?  [true]                              -->
+  <!--                                                                      -->
+  <!--   readmeFile          File to display together with the directory    -->
+  <!--                       contents. [null]                               -->
+  <!--                                                                      -->
+  <!--   sendfileSize        If the connector used supports sendfile, this  -->
+  <!--                       represents the minimal file size in KB for     -->
+  <!--                       which sendfile will be used. Use a negative    -->
+  <!--                       value to always disable sendfile.  [48]        -->
+  <!--                                                                      -->
+  <!--   useAcceptRanges     Should the Accept-Ranges header be included    -->
+  <!--                       in responses where appropriate? [true]         -->
+  <!--                                                                      -->
+  <!--  For directory listing customization. Checks localXsltFile, then     -->
+  <!--  globalXsltFile, then defaults to original behavior.                 -->
+  <!--                                                                      -->
+  <!--   localXsltFile       Make directory listings an XML doc and         -->
+  <!--                       pass the result to this style sheet residing   -->
+  <!--                       in that directory. This overrides              -->
+  <!--                       contextXsltFile and globalXsltFile[null]       -->
+  <!--                                                                      -->
+  <!--   contextXsltFile     Make directory listings an XML doc and         -->
+  <!--                       pass the result to this style sheet which is   -->
+  <!--                       relative to the context root. This overrides   -->
+  <!--                       globalXsltFile[null]                           -->
+  <!--                                                                      -->
+  <!--   globalXsltFile      Site wide configuration version of             -->
+  <!--                       localXsltFile. This argument must either be an -->
+  <!--                       absolute or relative (to either                -->
+  <!--                       $CATALINA_BASE/conf or $CATALINA_HOME/conf)    -->
+  <!--                       path that points to a location below either    -->
+  <!--                       $CATALINA_BASE/conf (checked first) or         -->
+  <!--                       $CATALINA_HOME/conf (checked second).[null]    -->
+  <!--                                                                      -->
+  <!--   showServerInfo      Should server information be presented in the  -->
+  <!--                       response sent to clients when directory        -->
+  <!--                       listings is enabled? [true]                    -->
+  <!--                                                                      -->
+  <!--   allowPartialPut     Should the server treat an HTTP PUT request    -->
+  <!--                       with a Range header as a partial PUT? Note     -->
+  <!--                       that RFC 7233 clarified that Range headers are -->
+  <!--                       only valid for GET requests. [true]            -->
+
+    <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+  <!-- The JSP page compiler and execution servlet, which is the mechanism  -->
+  <!-- used by Tomcat to support JSP pages.  Traditionally, this servlet    -->
+  <!-- is mapped to the URL pattern "*.jsp".  This servlet supports the     -->
+  <!-- following initialization parameters (default values are in square    -->
+  <!-- brackets):                                                           -->
+  <!--                                                                      -->
+  <!--   checkInterval       If development is false and checkInterval is   -->
+  <!--                       greater than zero, background compilations are -->
+  <!--                       enabled. checkInterval is the time in seconds  -->
+  <!--                       between checks to see if a JSP page (and its   -->
+  <!--                       dependent files) needs to  be recompiled. [0]  -->
+  <!--                                                                      -->
+  <!--   classdebuginfo      Should the class file be compiled with         -->
+  <!--                       debugging information?  [true]                 -->
+  <!--                                                                      -->
+  <!--   classpath           What class path should I use while compiling   -->
+  <!--                       generated servlets?  [Created dynamically      -->
+  <!--                       based on the current web application]          -->
+  <!--                                                                      -->
+  <!--   compiler            Which compiler Ant should use to compile JSP   -->
+  <!--                       pages.  See the jasper documentation for more  -->
+  <!--                       information.                                   -->
+  <!--                                                                      -->
+  <!--   compilerSourceVM    Compiler source VM. [1.8]                      -->
+  <!--                                                                      -->
+  <!--   compilerTargetVM    Compiler target VM. [1.8]                      -->
+  <!--                                                                      -->
+  <!--   development         Is Jasper used in development mode? If true,   -->
+  <!--                       the frequency at which JSPs are checked for    -->
+  <!--                       modification may be specified via the          -->
+  <!--                       modificationTestInterval parameter. [true]     -->
+  <!--                                                                      -->
+  <!--   displaySourceFragment                                              -->
+  <!--                       Should a source fragment be included in        -->
+  <!--                       exception messages? [true]                     -->
+  <!--                                                                      -->
+  <!--   dumpSmap            Should the SMAP info for JSR45 debugging be    -->
+  <!--                       dumped to a file? [false]                      -->
+  <!--                       False if suppressSmap is true                  -->
+  <!--                                                                      -->
+  <!--   enablePooling       Determines whether tag handler pooling is      -->
+  <!--                       enabled. This is a compilation option. It will -->
+  <!--                       not alter the behaviour of JSPs that have      -->
+  <!--                       already been compiled. [true]                  -->
+  <!--                                                                      -->
+  <!--   engineOptionsClass  Allows specifying the Options class used to    -->
+  <!--                       configure Jasper. If not present, the default  -->
+  <!--                       EmbeddedServletOptions will be used.           -->
+  <!--                       This option is ignored when running under a    -->
+  <!--                       SecurityManager.                               -->
+  <!--                                                                      -->
+  <!--   errorOnUseBeanInvalidClassAttribute                                -->
+  <!--                       Should Jasper issue an error when the value of -->
+  <!--                       the class attribute in an useBean action is    -->
+  <!--                       not a valid bean class?  [true]                -->
+  <!--                                                                      -->
+  <!--   fork                Tell Ant to fork compiles of JSP pages so that -->
+  <!--                       a separate JVM is used for JSP page compiles   -->
+  <!--                       from the one Tomcat is running in. [true]      -->
+  <!--                                                                      -->
+  <!--   genStringAsCharArray                                               -->
+  <!--                       Should text strings be generated as char       -->
+  <!--                       arrays, to improve performance in some cases?  -->
+  <!--                       [false]                                        -->
+  <!--                                                                      -->
+  <!--   ieClassId           Deprecated. Will be removed in Tomcat 10.1     -->
+  <!--                       The class-id value to be sent to Internet      -->
+  <!--                       Explorer when using <jsp:plugin> tags.         -->
+  <!--                       [clsid:8AD9C840-044E-11D1-B3E9-00805F499D93]   -->
+  <!--                                                                      -->
+  <!--   javaEncoding        Java file encoding to use for generating java  -->
+  <!--                       source files. [UTF8]                           -->
+  <!--                                                                      -->
+  <!--   keepgenerated       Should we keep the generated Java source code  -->
+  <!--                       for each page instead of deleting it? [true]   -->
+  <!--                                                                      -->
+  <!--   mappedfile          Should we generate static content with one     -->
+  <!--                       print statement per input line, to ease        -->
+  <!--                       debugging?  [true]                             -->
+  <!--                                                                      -->
+  <!--   maxLoadedJsps       The maximum number of JSPs that will be loaded -->
+  <!--                       for a web application. If more than this       -->
+  <!--                       number of JSPs are loaded, the least recently  -->
+  <!--                       used JSPs will be unloaded so that the number  -->
+  <!--                       of JSPs loaded at any one time does not exceed -->
+  <!--                       this limit. A value of zero or less indicates  -->
+  <!--                       no limit. [-1]                                 -->
+  <!--                                                                      -->
+  <!--   jspIdleTimeout      The amount of time in seconds a JSP can be     -->
+  <!--                       idle before it is unloaded. A value of zero    -->
+  <!--                       or less indicates never unload. [-1]           -->
+  <!--                                                                      -->
+  <!--   modificationTestInterval                                           -->
+  <!--                       Causes a JSP (and its dependent files) to not  -->
+  <!--                       be checked for modification during the         -->
+  <!--                       specified time interval (in seconds) from the  -->
+  <!--                       last time the JSP was checked for              -->
+  <!--                       modification. A value of 0 will cause the JSP  -->
+  <!--                       to be checked on every access.                 -->
+  <!--                       Used in development mode only. [4]             -->
+  <!--                                                                      -->
+  <!--   recompileOnFail     If a JSP compilation fails should the          -->
+  <!--                       modificationTestInterval be ignored and the    -->
+  <!--                       next access trigger a re-compilation attempt?  -->
+  <!--                       Used in development mode only and is disabled  -->
+  <!--                       by default as compilation may be expensive and -->
+  <!--                       could lead to excessive resource usage.        -->
+  <!--                       [false]                                        -->
+  <!--                                                                      -->
+  <!--   scratchdir          What scratch directory should we use when      -->
+  <!--                       compiling JSP pages?  [default work directory  -->
+  <!--                       for the current web application]               -->
+  <!--                       This option is ignored when running under a    -->
+  <!--                       SecurityManager.                               -->
+  <!--                                                                      -->
+  <!--   suppressSmap        Should the generation of SMAP info for JSR45   -->
+  <!--                       debugging be suppressed?  [false]              -->
+  <!--                                                                      -->
+  <!--   trimSpaces          Should template text that consists entirely of -->
+  <!--                       whitespace be removed from the output (true),  -->
+  <!--                       replaced with a single space (single) or left  -->
+  <!--                       unchanged (false)? Note that if a JSP page or  -->
+  <!--                       tag file specifies a trimDirectiveWhitespaces  -->
+  <!--                       value of true, that will take precedence over  -->
+  <!--                       this configuration setting for that page/tag.  -->
+  <!--                       [false]                                        -->
+  <!--                                                                      -->
+  <!--   xpoweredBy          Determines whether X-Powered-By response       -->
+  <!--                       header is added by generated servlet.  [false] -->
+  <!--                                                                      -->
+  <!--   strictQuoteEscaping When scriptlet expressions are used for        -->
+  <!--                       attribute values, should the rules in JSP.1.6  -->
+  <!--                       for the escaping of quote characters be        -->
+  <!--                       strictly applied? [true]                       -->
+  <!--                                                                      -->
+  <!--   quoteAttributeEL    When EL is used in an attribute value on a     -->
+  <!--                       JSP page should the rules for quoting of       -->
+  <!--                       attributes described in JSP.1.6 be applied to  -->
+  <!--                       the expression? [true]                         -->
+
+    <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <init-param>
+            <param-name>fork</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>xpoweredBy</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+
+  <!-- NOTE: An SSI Filter is also available as an alternative SSI          -->
+  <!-- implementation. Use either the Servlet or the Filter but NOT both.   -->
+  <!--                                                                      -->
+  <!-- Server Side Includes processing servlet, which processes SSI         -->
+  <!-- directives in HTML pages consistent with similar support in web      -->
+  <!-- servers like Apache.  Traditionally, this servlet is mapped to the   -->
+  <!-- URL pattern "*.shtml".  This servlet supports the following          -->
+  <!-- initialization parameters (default values are in square brackets):   -->
+  <!--                                                                      -->
+  <!--   buffered            Should output from this servlet be buffered?   -->
+  <!--                       (0=false, 1=true)  [0]                         -->
+  <!--                                                                      -->
+  <!--   debug               Debugging detail level for messages logged     -->
+  <!--                       by this servlet.  [0]                          -->
+  <!--                                                                      -->
+  <!--   expires             The number of seconds before a page with SSI   -->
+  <!--                       directives will expire.  [No default]          -->
+  <!--                                                                      -->
+  <!--   isVirtualWebappRelative                                            -->
+  <!--                       Should "virtual" paths be interpreted as       -->
+  <!--                       relative to the context root, instead of       -->
+  <!--                       the server root? [false]                       -->
+  <!--                                                                      -->
+  <!--   inputEncoding       The encoding to assume for SSI resources if    -->
+  <!--                       one is not available from the resource.        -->
+  <!--                       [Platform default]                             -->
+  <!--                                                                      -->
+  <!--   outputEncoding      The encoding to use for the page that results  -->
+  <!--                       from the SSI processing. [UTF-8]               -->
+  <!--                                                                      -->
+  <!--   allowExec           Is use of the exec command enabled? [false]    -->
+
+<!--
+    <servlet>
+        <servlet-name>ssi</servlet-name>
+        <servlet-class>
+          org.apache.catalina.ssi.SSIServlet
+        </servlet-class>
+        <init-param>
+          <param-name>buffered</param-name>
+          <param-value>1</param-value>
+        </init-param>
+        <init-param>
+          <param-name>debug</param-name>
+          <param-value>0</param-value>
+        </init-param>
+        <init-param>
+          <param-name>expires</param-name>
+          <param-value>666</param-value>
+        </init-param>
+        <init-param>
+          <param-name>isVirtualWebappRelative</param-name>
+          <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+-->
+
+
+  <!-- Common Gateway Includes (CGI) processing servlet, which supports     -->
+  <!-- execution of external applications that conform to the CGI spec      -->
+  <!-- requirements.  Typically, this servlet is mapped to the URL pattern  -->
+  <!-- "/cgi-bin/*", which means that any CGI applications that are         -->
+  <!-- executed must be present within the web application.  This servlet   -->
+  <!-- supports the following initialization parameters (default values     -->
+  <!-- are in square brackets):                                             -->
+  <!--                                                                      -->
+  <!--   cgiPathPrefix        The CGI search path will start at             -->
+  <!--                        webAppRootDir + File.separator + this prefix. -->
+  <!--                        If not set, then webAppRootDir is used.       -->
+  <!--                        Recommended value: WEB-INF/cgi                -->
+  <!--                                                                      -->
+  <!--  cmdLineArgumentsDecoded                                             -->
+  <!--                        Only used when enableCmdLineArguments is      -->
+  <!--                        true. The pattern that individual decoded     -->
+  <!--                        command line arguments must match else the    -->
+  <!--                        request will be rejected. This is to          -->
+  <!--                        work-around various issues when Java passes   -->
+  <!--                        the arguments to the OS. See the CGI How-To   -->
+  <!--                        for more details. The default varies by       -->
+  <!--                        platform.                                     -->
+  <!--                        Windows: [[a-zA-Z0-9\Q-_.\\/:\E]+]            -->
+  <!--                        Others:  [.*]                                 -->
+  <!--                        Note that internally the CGI Servlet treats   -->
+  <!--                        [.*] as a special case to improve performance -->
+  <!--                                                                      -->
+  <!--   cmdLineArgumentsEncoded                                            -->
+  <!--                        Only used when enableCmdLineArguments is      -->
+  <!--                        true. The pattern that individual encoded     -->
+  <!--                        command line arguments must match else the    -->
+  <!--                        request will be rejected. The default matches -->
+  <!--                        the allowed values defined by RFC3875.        -->
+  <!--                        [[a-zA-Z0-9\Q%;/?:@&,$-_.!~*'()\E]+]          -->
+  <!--                                                                      -->
+  <!--   enableCmdLineArguments                                             -->
+  <!--                        Are command line parameters generated from    -->
+  <!--                        the query string as per section 4.4 of 3875   -->
+  <!--                        RFC? [false]                                  -->
+  <!--                                                                      -->
+  <!--   executable           Name of the executable used to run the        -->
+  <!--                        script. [perl]                                -->
+  <!--                                                                      -->
+  <!--   envHttpHeaders       A regular expression used to select the HTTP  -->
+  <!--                        headers passed to the CGI process as          -->
+  <!--                        environment variables. Note that headers are  -->
+  <!--                        converted to upper case before matching and   -->
+  <!--                        that the entire header name must match the    -->
+  <!--                        pattern.                                      -->
+  <!--                        [ACCEPT[-0-9A-Z]*|CACHE-CONTROL|COOKIE|HOST|  -->
+  <!--                         IF-[-0-9A-Z]*|REFERER|USER-AGENT]            -->
+  <!--                                                                      -->
+  <!--  environment-variable- An environment to be set for the execution    -->
+  <!--                        environment of the CGI script. The name of    -->
+  <!--                        variable is taken from the parameter name.    -->
+  <!--                        To configure an environment variable named    -->
+  <!--                        FOO, configure a parameter named              -->
+  <!--                        environment-variable-FOO. The parameter value -->
+  <!--                        is used as the environment variable value.    -->
+  <!--                        The default is no environment variables.      -->
+  <!--                                                                      -->
+  <!--   parameterEncoding    Name of parameter encoding to be used with    -->
+  <!--                        CGI servlet.                                  -->
+  <!--                        [System.getProperty("file.encoding","UTF-8")] -->
+  <!--                                                                      -->
+  <!--   passShellEnvironment Should the shell environment variables (if    -->
+  <!--                        any) be passed to the CGI script? [false]     -->
+  <!--                                                                      -->
+  <!--   stderrTimeout        The time (in milliseconds) to wait for the    -->
+  <!--                        reading of stderr to complete before          -->
+  <!--                        terminating the CGI process. [2000]           -->
+
+<!--
+    <servlet>
+        <servlet-name>cgi</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.CGIServlet</servlet-class>
+        <init-param>
+          <param-name>cgiPathPrefix</param-name>
+          <param-value>WEB-INF/cgi</param-value>
+        </init-param>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+-->
+
+
+  <!-- ================ Built In Servlet Mappings ========================= -->
+
+
+  <!-- The servlet mappings for the built in servlets defined above.  Note  -->
+  <!-- that, by default, the CGI and SSI servlets are *not* mapped.  You    -->
+  <!-- must uncomment these mappings (or add them to your application's own -->
+  <!-- web.xml deployment descriptor) to enable these services              -->
+
+    <!-- The mapping for the default servlet -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- The mappings for the JSP servlet -->
+    <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jsp</url-pattern>
+        <url-pattern>*.jspx</url-pattern>
+    </servlet-mapping>
+
+    <!-- The mapping for the SSI servlet -->
+<!--
+    <servlet-mapping>
+        <servlet-name>ssi</servlet-name>
+        <url-pattern>*.shtml</url-pattern>
+    </servlet-mapping>
+-->
+
+    <!-- The mapping for the CGI Gateway servlet -->
+
+<!--
+    <servlet-mapping>
+        <servlet-name>cgi</servlet-name>
+        <url-pattern>/cgi-bin/*</url-pattern>
+    </servlet-mapping>
+-->
+
+
+  <!-- ================== Built In Filter Definitions ===================== -->
+
+  <!-- A filter that sets various security related HTTP Response headers.   -->
+  <!-- This filter supports the following initialization parameters         -->
+  <!-- (default values are in square brackets):                             -->
+  <!--                                                                      -->
+  <!--   hstsEnabled         Should the HTTP Strict Transport Security      -->
+  <!--                       (HSTS) header be added to the response? See    -->
+  <!--                       RFC 6797 for more information on HSTS. [true]  -->
+  <!--                                                                      -->
+  <!--   hstsMaxAgeSeconds   The max age value that should be used in the   -->
+  <!--                       HSTS header. Negative values will be treated   -->
+  <!--                       as zero. [0]                                   -->
+  <!--                                                                      -->
+  <!--   hstsIncludeSubDomains                                              -->
+  <!--                       Should the includeSubDomains parameter be      -->
+  <!--                       included in the HSTS header.                   -->
+  <!--                                                                      -->
+  <!--   antiClickJackingEnabled                                            -->
+  <!--                       Should the anti click-jacking header           -->
+  <!--                       X-Frame-Options be added to every response?    -->
+  <!--                       [true]                                         -->
+  <!--                                                                      -->
+  <!--   antiClickJackingOption                                             -->
+  <!--                       What value should be used for the header. Must -->
+  <!--                       be one of DENY, SAMEORIGIN, ALLOW-FROM         -->
+  <!--                       (case-insensitive). [DENY]                     -->
+  <!--                                                                      -->
+  <!--   antiClickJackingUri IF ALLOW-FROM is used, what URI should be      -->
+  <!--                       allowed? []                                    -->
+  <!--                                                                      -->
+  <!--   blockContentTypeSniffingEnabled                                    -->
+  <!--                       Should the header that blocks content type     -->
+  <!--                       sniffing be added to every response? [true]    -->
+<!--
+    <filter>
+        <filter-name>httpHeaderSecurity</filter-name>
+        <filter-class>org.apache.catalina.filters.HttpHeaderSecurityFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+-->
+
+  <!-- A filter that sets character encoding that is used to decode -->
+  <!-- parameters in a POST request -->
+<!--
+    <filter>
+        <filter-name>setCharacterEncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <async-supported>true</async-supported>
+    </filter>
+-->
+
+  <!-- A filter that triggers request parameters parsing and rejects the    -->
+  <!-- request if some parameters were skipped because of parsing errors or -->
+  <!-- request size limitations.                                            -->
+<!--
+    <filter>
+        <filter-name>failedRequestFilter</filter-name>
+        <filter-class>
+          org.apache.catalina.filters.FailedRequestFilter
+        </filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+-->
+
+
+  <!-- NOTE: An SSI Servlet is also available as an alternative SSI         -->
+  <!-- implementation. Use either the Servlet or the Filter but NOT both.   -->
+  <!--                                                                      -->
+  <!-- Server Side Includes processing filter, which processes SSI          -->
+  <!-- directives in HTML pages consistent with similar support in web      -->
+  <!-- servers like Apache.  Traditionally, this filter is mapped to the    -->
+  <!-- URL pattern "*.shtml", though it can be mapped to "*" as it will     -->
+  <!-- selectively enable/disable SSI processing based on mime types. For   -->
+  <!-- this to work you will need to uncomment the .shtml mime type         -->
+  <!-- definition towards the bottom of this file.                          -->
+  <!-- The contentType init param allows you to apply SSI processing to JSP -->
+  <!-- pages, JavaScript, or any other content you wish.  This filter       -->
+  <!-- supports the following initialization parameters (default values are -->
+  <!-- in square brackets):                                                 -->
+  <!--                                                                      -->
+  <!--   contentType         A regex pattern that must be matched before    -->
+  <!--                       SSI processing is applied.                     -->
+  <!--                       [text/x-server-parsed-html(;.*)?]              -->
+  <!--                                                                      -->
+  <!--   debug               Debugging detail level for messages logged     -->
+  <!--                       by this servlet.  [0]                          -->
+  <!--                                                                      -->
+  <!--   expires             The number of seconds before a page with SSI   -->
+  <!--                       directives will expire.  [No default]          -->
+  <!--                                                                      -->
+  <!--   isVirtualWebappRelative                                            -->
+  <!--                       Should "virtual" paths be interpreted as       -->
+  <!--                       relative to the context root, instead of       -->
+  <!--                       the server root? [false]                       -->
+  <!--                                                                      -->
+  <!--   allowExec           Is use of the exec command enabled? [false]    -->
+
+<!--
+    <filter>
+        <filter-name>ssi</filter-name>
+        <filter-class>
+          org.apache.catalina.ssi.SSIFilter
+        </filter-class>
+        <init-param>
+          <param-name>contentType</param-name>
+          <param-value>text/x-server-parsed-html(;.*)?</param-value>
+        </init-param>
+        <init-param>
+          <param-name>debug</param-name>
+          <param-value>0</param-value>
+        </init-param>
+        <init-param>
+          <param-name>expires</param-name>
+          <param-value>666</param-value>
+        </init-param>
+        <init-param>
+          <param-name>isVirtualWebappRelative</param-name>
+          <param-value>false</param-value>
+        </init-param>
+    </filter>
+-->
+
+
+  <!-- ==================== Built In Filter Mappings ====================== -->
+
+  <!-- The mapping for the HTTP header security Filter -->
+<!--
+    <filter-mapping>
+        <filter-name>httpHeaderSecurity</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+-->
+
+  <!-- The mapping for the Set Character Encoding Filter -->
+<!--
+    <filter-mapping>
+        <filter-name>setCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+-->
+
+  <!-- The mapping for the Failed Request Filter -->
+<!--
+    <filter-mapping>
+        <filter-name>failedRequestFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+-->
+
+  <!-- The mapping for the SSI Filter -->
+<!--
+    <filter-mapping>
+        <filter-name>ssi</filter-name>
+        <url-pattern>*.shtml</url-pattern>
+    </filter-mapping>
+-->
+
+
+  <!-- ==================== Default Session Configuration ================= -->
+  <!-- You can set the default session timeout (in minutes) for all newly   -->
+  <!-- created sessions by modifying the value below.                       -->
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+
+  <!-- ===================== Default MIME Type Mappings =================== -->
+  <!-- When serving static resources, Tomcat will automatically generate    -->
+  <!-- a "Content-Type" header based on the resource's filename extension,  -->
+  <!-- based on these mappings.  Additional mappings can be added here (to  -->
+  <!-- apply to all web applications), or in your own application's web.xml -->
+  <!-- deployment descriptor.                                               -->
+  <!-- Note: Extensions are always matched in a case-insensitive manner.    -->
+
+    <mime-mapping>
+        <extension>123</extension>
+        <mime-type>application/vnd.lotus-1-2-3</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>3dml</extension>
+        <mime-type>text/vnd.in3d.3dml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>3ds</extension>
+        <mime-type>image/x-3ds</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>3g2</extension>
+        <mime-type>video/3gpp2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>3gp</extension>
+        <mime-type>video/3gpp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>7z</extension>
+        <mime-type>application/x-7z-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aab</extension>
+        <mime-type>application/x-authorware-bin</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aac</extension>
+        <mime-type>audio/x-aac</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aam</extension>
+        <mime-type>application/x-authorware-map</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aas</extension>
+        <mime-type>application/x-authorware-seg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>abs</extension>
+        <mime-type>audio/x-mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>abw</extension>
+        <mime-type>application/x-abiword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ac</extension>
+        <mime-type>application/pkix-attr-cert</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>acc</extension>
+        <mime-type>application/vnd.americandynamics.acc</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ace</extension>
+        <mime-type>application/x-ace-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>acu</extension>
+        <mime-type>application/vnd.acucobol</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>acutc</extension>
+        <mime-type>application/vnd.acucorp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>adp</extension>
+        <mime-type>audio/adpcm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aep</extension>
+        <mime-type>application/vnd.audiograph</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>afm</extension>
+        <mime-type>application/x-font-type1</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>afp</extension>
+        <mime-type>application/vnd.ibm.modcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ahead</extension>
+        <mime-type>application/vnd.ahead.space</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ai</extension>
+        <mime-type>application/postscript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aif</extension>
+        <mime-type>audio/x-aiff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aifc</extension>
+        <mime-type>audio/x-aiff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aiff</extension>
+        <mime-type>audio/x-aiff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aim</extension>
+        <mime-type>application/x-aim</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>air</extension>
+        <mime-type>application/vnd.adobe.air-application-installer-package+zip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ait</extension>
+        <mime-type>application/vnd.dvb.ait</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ami</extension>
+        <mime-type>application/vnd.amiga.ami</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>anx</extension>
+        <mime-type>application/annodex</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>apk</extension>
+        <mime-type>application/vnd.android.package-archive</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>appcache</extension>
+        <mime-type>text/cache-manifest</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>application</extension>
+        <mime-type>application/x-ms-application</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>apr</extension>
+        <mime-type>application/vnd.lotus-approach</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>arc</extension>
+        <mime-type>application/x-freearc</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>art</extension>
+        <mime-type>image/x-jg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>asc</extension>
+        <mime-type>application/pgp-signature</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>asf</extension>
+        <mime-type>video/x-ms-asf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>asm</extension>
+        <mime-type>text/x-asm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aso</extension>
+        <mime-type>application/vnd.accpac.simply.aso</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>asx</extension>
+        <mime-type>video/x-ms-asf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>atc</extension>
+        <mime-type>application/vnd.acucorp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>atom</extension>
+        <mime-type>application/atom+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>atomcat</extension>
+        <mime-type>application/atomcat+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>atomsvc</extension>
+        <mime-type>application/atomsvc+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>atx</extension>
+        <mime-type>application/vnd.antix.game-component</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>au</extension>
+        <mime-type>audio/basic</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>avi</extension>
+        <mime-type>video/x-msvideo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>avx</extension>
+        <mime-type>video/x-rad-screenplay</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>aw</extension>
+        <mime-type>application/applixware</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>axa</extension>
+        <mime-type>audio/annodex</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>axv</extension>
+        <mime-type>video/annodex</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>azf</extension>
+        <mime-type>application/vnd.airzip.filesecure.azf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>azs</extension>
+        <mime-type>application/vnd.airzip.filesecure.azs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>azw</extension>
+        <mime-type>application/vnd.amazon.ebook</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bat</extension>
+        <mime-type>application/x-msdownload</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bcpio</extension>
+        <mime-type>application/x-bcpio</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bdf</extension>
+        <mime-type>application/x-font-bdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bdm</extension>
+        <mime-type>application/vnd.syncml.dm+wbxml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bed</extension>
+        <mime-type>application/vnd.realvnc.bed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bh2</extension>
+        <mime-type>application/vnd.fujitsu.oasysprs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bin</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>blb</extension>
+        <mime-type>application/x-blorb</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>blorb</extension>
+        <mime-type>application/x-blorb</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bmi</extension>
+        <mime-type>application/vnd.bmi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bmp</extension>
+        <mime-type>image/bmp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>body</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>book</extension>
+        <mime-type>application/vnd.framemaker</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>box</extension>
+        <mime-type>application/vnd.previewsystems.box</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>boz</extension>
+        <mime-type>application/x-bzip2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bpk</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>btif</extension>
+        <mime-type>image/prs.btif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bz</extension>
+        <mime-type>application/x-bzip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>bz2</extension>
+        <mime-type>application/x-bzip2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c11amc</extension>
+        <mime-type>application/vnd.cluetrust.cartomobile-config</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c11amz</extension>
+        <mime-type>application/vnd.cluetrust.cartomobile-config-pkg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c4d</extension>
+        <mime-type>application/vnd.clonk.c4group</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c4f</extension>
+        <mime-type>application/vnd.clonk.c4group</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c4g</extension>
+        <mime-type>application/vnd.clonk.c4group</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c4p</extension>
+        <mime-type>application/vnd.clonk.c4group</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>c4u</extension>
+        <mime-type>application/vnd.clonk.c4group</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cab</extension>
+        <mime-type>application/vnd.ms-cab-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>caf</extension>
+        <mime-type>audio/x-caf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cap</extension>
+        <mime-type>application/vnd.tcpdump.pcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>car</extension>
+        <mime-type>application/vnd.curl.car</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cat</extension>
+        <mime-type>application/vnd.ms-pki.seccat</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cb7</extension>
+        <mime-type>application/x-cbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cba</extension>
+        <mime-type>application/x-cbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cbr</extension>
+        <mime-type>application/x-cbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cbt</extension>
+        <mime-type>application/x-cbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cbz</extension>
+        <mime-type>application/x-cbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cc</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cct</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ccxml</extension>
+        <mime-type>application/ccxml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdbcmsg</extension>
+        <mime-type>application/vnd.contact.cmsg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdf</extension>
+        <mime-type>application/x-cdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdkey</extension>
+        <mime-type>application/vnd.mediastation.cdkey</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdmia</extension>
+        <mime-type>application/cdmi-capability</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdmic</extension>
+        <mime-type>application/cdmi-container</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdmid</extension>
+        <mime-type>application/cdmi-domain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdmio</extension>
+        <mime-type>application/cdmi-object</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdmiq</extension>
+        <mime-type>application/cdmi-queue</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdx</extension>
+        <mime-type>chemical/x-cdx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdxml</extension>
+        <mime-type>application/vnd.chemdraw+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cdy</extension>
+        <mime-type>application/vnd.cinderella</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cer</extension>
+        <mime-type>application/pkix-cert</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cfs</extension>
+        <mime-type>application/x-cfs-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cgm</extension>
+        <mime-type>image/cgm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>chat</extension>
+        <mime-type>application/x-chat</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>chm</extension>
+        <mime-type>application/vnd.ms-htmlhelp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>chrt</extension>
+        <mime-type>application/vnd.kde.kchart</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cif</extension>
+        <mime-type>chemical/x-cif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cii</extension>
+        <mime-type>application/vnd.anser-web-certificate-issue-initiation</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cil</extension>
+        <mime-type>application/vnd.ms-artgalry</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cla</extension>
+        <mime-type>application/vnd.claymore</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>class</extension>
+        <mime-type>application/java</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clkk</extension>
+        <mime-type>application/vnd.crick.clicker.keyboard</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clkp</extension>
+        <mime-type>application/vnd.crick.clicker.palette</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clkt</extension>
+        <mime-type>application/vnd.crick.clicker.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clkw</extension>
+        <mime-type>application/vnd.crick.clicker.wordbank</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clkx</extension>
+        <mime-type>application/vnd.crick.clicker</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>clp</extension>
+        <mime-type>application/x-msclip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cmc</extension>
+        <mime-type>application/vnd.cosmocaller</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cmdf</extension>
+        <mime-type>chemical/x-cmdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cml</extension>
+        <mime-type>chemical/x-cml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cmp</extension>
+        <mime-type>application/vnd.yellowriver-custom-menu</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cmx</extension>
+        <mime-type>image/x-cmx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cod</extension>
+        <mime-type>application/vnd.rim.cod</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>com</extension>
+        <mime-type>application/x-msdownload</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>conf</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cpio</extension>
+        <mime-type>application/x-cpio</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cpp</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cpt</extension>
+        <mime-type>application/mac-compactpro</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>crd</extension>
+        <mime-type>application/x-mscardfile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>crl</extension>
+        <mime-type>application/pkix-crl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>crt</extension>
+        <mime-type>application/x-x509-ca-cert</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cryptonote</extension>
+        <mime-type>application/vnd.rig.cryptonote</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>csh</extension>
+        <mime-type>application/x-csh</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>csml</extension>
+        <mime-type>chemical/x-csml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>csp</extension>
+        <mime-type>application/vnd.commonspace</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cst</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>csv</extension>
+        <mime-type>text/csv</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cu</extension>
+        <mime-type>application/cu-seeme</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>curl</extension>
+        <mime-type>text/vnd.curl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cww</extension>
+        <mime-type>application/prs.cww</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cxt</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>cxx</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dae</extension>
+        <mime-type>model/vnd.collada+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>daf</extension>
+        <mime-type>application/vnd.mobius.daf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dart</extension>
+        <mime-type>application/vnd.dart</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dataless</extension>
+        <mime-type>application/vnd.fdsn.seed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>davmount</extension>
+        <mime-type>application/davmount+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dbk</extension>
+        <mime-type>application/docbook+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dcr</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dcurl</extension>
+        <mime-type>text/vnd.curl.dcurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dd2</extension>
+        <mime-type>application/vnd.oma.dd2+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ddd</extension>
+        <mime-type>application/vnd.fujixerox.ddd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>deb</extension>
+        <mime-type>application/x-debian-package</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>def</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>deploy</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>der</extension>
+        <mime-type>application/x-x509-ca-cert</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dfac</extension>
+        <mime-type>application/vnd.dreamfactory</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dgc</extension>
+        <mime-type>application/x-dgc-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dib</extension>
+        <mime-type>image/bmp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dic</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dir</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dis</extension>
+        <mime-type>application/vnd.mobius.dis</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dist</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>distz</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>djv</extension>
+        <mime-type>image/vnd.djvu</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>djvu</extension>
+        <mime-type>image/vnd.djvu</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dll</extension>
+        <mime-type>application/x-msdownload</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dmg</extension>
+        <mime-type>application/x-apple-diskimage</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dmp</extension>
+        <mime-type>application/vnd.tcpdump.pcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dms</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dna</extension>
+        <mime-type>application/vnd.dna</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>doc</extension>
+        <mime-type>application/msword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>docm</extension>
+        <mime-type>application/vnd.ms-word.document.macroenabled.12</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>docx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.wordprocessingml.document</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dot</extension>
+        <mime-type>application/msword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dotm</extension>
+        <mime-type>application/vnd.ms-word.template.macroenabled.12</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dotx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.wordprocessingml.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dp</extension>
+        <mime-type>application/vnd.osgi.dp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dpg</extension>
+        <mime-type>application/vnd.dpgraph</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dra</extension>
+        <mime-type>audio/vnd.dra</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dsc</extension>
+        <mime-type>text/prs.lines.tag</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dssc</extension>
+        <mime-type>application/dssc+der</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dtb</extension>
+        <mime-type>application/x-dtbook+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dtd</extension>
+        <mime-type>application/xml-dtd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dts</extension>
+        <mime-type>audio/vnd.dts</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dtshd</extension>
+        <mime-type>audio/vnd.dts.hd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dump</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dv</extension>
+        <mime-type>video/x-dv</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dvb</extension>
+        <mime-type>video/vnd.dvb.file</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dvi</extension>
+        <mime-type>application/x-dvi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dwf</extension>
+        <mime-type>model/vnd.dwf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dwg</extension>
+        <mime-type>image/vnd.dwg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dxf</extension>
+        <mime-type>image/vnd.dxf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dxp</extension>
+        <mime-type>application/vnd.spotfire.dxp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>dxr</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ecelp4800</extension>
+        <mime-type>audio/vnd.nuera.ecelp4800</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ecelp7470</extension>
+        <mime-type>audio/vnd.nuera.ecelp7470</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ecelp9600</extension>
+        <mime-type>audio/vnd.nuera.ecelp9600</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ecma</extension>
+        <mime-type>application/ecmascript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>edm</extension>
+        <mime-type>application/vnd.novadigm.edm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>edx</extension>
+        <mime-type>application/vnd.novadigm.edx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>efif</extension>
+        <mime-type>application/vnd.picsel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ei6</extension>
+        <mime-type>application/vnd.pg.osasli</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>elc</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>emf</extension>
+        <mime-type>application/x-msmetafile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eml</extension>
+        <mime-type>message/rfc822</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>emma</extension>
+        <mime-type>application/emma+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>emz</extension>
+        <mime-type>application/x-msmetafile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eol</extension>
+        <mime-type>audio/vnd.digital-winds</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eot</extension>
+        <mime-type>application/vnd.ms-fontobject</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eps</extension>
+        <mime-type>application/postscript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>epub</extension>
+        <mime-type>application/epub+zip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>es3</extension>
+        <mime-type>application/vnd.eszigno3+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>esa</extension>
+        <mime-type>application/vnd.osgi.subsystem</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>esf</extension>
+        <mime-type>application/vnd.epson.esf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>et3</extension>
+        <mime-type>application/vnd.eszigno3+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>etx</extension>
+        <mime-type>text/x-setext</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>eva</extension>
+        <mime-type>application/x-eva</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>evy</extension>
+        <mime-type>application/x-envoy</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>exe</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>exi</extension>
+        <mime-type>application/exi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ext</extension>
+        <mime-type>application/vnd.novadigm.ext</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ez</extension>
+        <mime-type>application/andrew-inset</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ez2</extension>
+        <mime-type>application/vnd.ezpix-album</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ez3</extension>
+        <mime-type>application/vnd.ezpix-package</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>f</extension>
+        <mime-type>text/x-fortran</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>f4v</extension>
+        <mime-type>video/x-f4v</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>f77</extension>
+        <mime-type>text/x-fortran</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>f90</extension>
+        <mime-type>text/x-fortran</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fbs</extension>
+        <mime-type>image/vnd.fastbidsheet</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fcdt</extension>
+        <mime-type>application/vnd.adobe.formscentral.fcdt</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fcs</extension>
+        <mime-type>application/vnd.isac.fcs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fdf</extension>
+        <mime-type>application/vnd.fdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fe_launch</extension>
+        <mime-type>application/vnd.denovo.fcselayout-link</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fg5</extension>
+        <mime-type>application/vnd.fujitsu.oasysgp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fgd</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fh</extension>
+        <mime-type>image/x-freehand</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fh4</extension>
+        <mime-type>image/x-freehand</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fh5</extension>
+        <mime-type>image/x-freehand</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fh7</extension>
+        <mime-type>image/x-freehand</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fhc</extension>
+        <mime-type>image/x-freehand</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fig</extension>
+        <mime-type>application/x-xfig</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>flac</extension>
+        <mime-type>audio/flac</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fli</extension>
+        <mime-type>video/x-fli</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>flo</extension>
+        <mime-type>application/vnd.micrografx.flo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>flv</extension>
+        <mime-type>video/x-flv</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>flw</extension>
+        <mime-type>application/vnd.kde.kivio</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>flx</extension>
+        <mime-type>text/vnd.fmi.flexstor</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fly</extension>
+        <mime-type>text/vnd.fly</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fm</extension>
+        <mime-type>application/vnd.framemaker</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fnc</extension>
+        <mime-type>application/vnd.frogans.fnc</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>for</extension>
+        <mime-type>text/x-fortran</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fpx</extension>
+        <mime-type>image/vnd.fpx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>frame</extension>
+        <mime-type>application/vnd.framemaker</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fsc</extension>
+        <mime-type>application/vnd.fsc.weblaunch</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fst</extension>
+        <mime-type>image/vnd.fst</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ftc</extension>
+        <mime-type>application/vnd.fluxtime.clip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fti</extension>
+        <mime-type>application/vnd.anser-web-funds-transfer-initiation</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fvt</extension>
+        <mime-type>video/vnd.fvt</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fxp</extension>
+        <mime-type>application/vnd.adobe.fxp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fxpl</extension>
+        <mime-type>application/vnd.adobe.fxp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>fzs</extension>
+        <mime-type>application/vnd.fuzzysheet</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>g2w</extension>
+        <mime-type>application/vnd.geoplan</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>g3</extension>
+        <mime-type>image/g3fax</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>g3w</extension>
+        <mime-type>application/vnd.geospace</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gac</extension>
+        <mime-type>application/vnd.groove-account</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gam</extension>
+        <mime-type>application/x-tads</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gbr</extension>
+        <mime-type>application/rpki-ghostbusters</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gca</extension>
+        <mime-type>application/x-gca-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gdl</extension>
+        <mime-type>model/vnd.gdl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>geo</extension>
+        <mime-type>application/vnd.dynageo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gex</extension>
+        <mime-type>application/vnd.geometry-explorer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ggb</extension>
+        <mime-type>application/vnd.geogebra.file</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ggt</extension>
+        <mime-type>application/vnd.geogebra.tool</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ghf</extension>
+        <mime-type>application/vnd.groove-help</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gif</extension>
+        <mime-type>image/gif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gim</extension>
+        <mime-type>application/vnd.groove-identity-message</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gml</extension>
+        <mime-type>application/gml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gmx</extension>
+        <mime-type>application/vnd.gmx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gnumeric</extension>
+        <mime-type>application/x-gnumeric</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gph</extension>
+        <mime-type>application/vnd.flographit</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gpx</extension>
+        <mime-type>application/gpx+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gqf</extension>
+        <mime-type>application/vnd.grafeq</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gqs</extension>
+        <mime-type>application/vnd.grafeq</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gram</extension>
+        <mime-type>application/srgs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gramps</extension>
+        <mime-type>application/x-gramps-xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gre</extension>
+        <mime-type>application/vnd.geometry-explorer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>grv</extension>
+        <mime-type>application/vnd.groove-injector</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>grxml</extension>
+        <mime-type>application/srgs+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gsf</extension>
+        <mime-type>application/x-font-ghostscript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gtar</extension>
+        <mime-type>application/x-gtar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gtm</extension>
+        <mime-type>application/vnd.groove-tool-message</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gtw</extension>
+        <mime-type>model/vnd.gtw</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gv</extension>
+        <mime-type>text/vnd.graphviz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gxf</extension>
+        <mime-type>application/gxf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gxt</extension>
+        <mime-type>application/vnd.geonext</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gz</extension>
+        <mime-type>application/x-gzip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>h</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>h261</extension>
+        <mime-type>video/h261</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>h263</extension>
+        <mime-type>video/h263</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>h264</extension>
+        <mime-type>video/h264</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hal</extension>
+        <mime-type>application/vnd.hal+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hbci</extension>
+        <mime-type>application/vnd.hbci</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hdf</extension>
+        <mime-type>application/x-hdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hh</extension>
+        <mime-type>text/x-c</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hlp</extension>
+        <mime-type>application/winhlp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hpgl</extension>
+        <mime-type>application/vnd.hp-hpgl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hpid</extension>
+        <mime-type>application/vnd.hp-hpid</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hps</extension>
+        <mime-type>application/vnd.hp-hps</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hqx</extension>
+        <mime-type>application/mac-binhex40</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>htc</extension>
+        <mime-type>text/x-component</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>htke</extension>
+        <mime-type>application/vnd.kenameaapp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>htm</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>html</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hvd</extension>
+        <mime-type>application/vnd.yamaha.hv-dic</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hvp</extension>
+        <mime-type>application/vnd.yamaha.hv-voice</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>hvs</extension>
+        <mime-type>application/vnd.yamaha.hv-script</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>i2g</extension>
+        <mime-type>application/vnd.intergeo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>icc</extension>
+        <mime-type>application/vnd.iccprofile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ice</extension>
+        <mime-type>x-conference/x-cooltalk</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>icm</extension>
+        <mime-type>application/vnd.iccprofile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ics</extension>
+        <mime-type>text/calendar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ief</extension>
+        <mime-type>image/ief</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ifb</extension>
+        <mime-type>text/calendar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ifm</extension>
+        <mime-type>application/vnd.shana.informed.formdata</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>iges</extension>
+        <mime-type>model/iges</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>igl</extension>
+        <mime-type>application/vnd.igloader</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>igm</extension>
+        <mime-type>application/vnd.insors.igm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>igs</extension>
+        <mime-type>model/iges</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>igx</extension>
+        <mime-type>application/vnd.micrografx.igx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>iif</extension>
+        <mime-type>application/vnd.shana.informed.interchange</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>imp</extension>
+        <mime-type>application/vnd.accpac.simply.imp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ims</extension>
+        <mime-type>application/vnd.ms-ims</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>in</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ink</extension>
+        <mime-type>application/inkml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>inkml</extension>
+        <mime-type>application/inkml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>install</extension>
+        <mime-type>application/x-install-instructions</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>iota</extension>
+        <mime-type>application/vnd.astraea-software.iota</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ipfix</extension>
+        <mime-type>application/ipfix</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ipk</extension>
+        <mime-type>application/vnd.shana.informed.package</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>irm</extension>
+        <mime-type>application/vnd.ibm.rights-management</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>irp</extension>
+        <mime-type>application/vnd.irepository.package+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>iso</extension>
+        <mime-type>application/x-iso9660-image</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>itp</extension>
+        <mime-type>application/vnd.shana.informed.formtemplate</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ivp</extension>
+        <mime-type>application/vnd.immervision-ivp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ivu</extension>
+        <mime-type>application/vnd.immervision-ivu</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jad</extension>
+        <mime-type>text/vnd.sun.j2me.app-descriptor</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jam</extension>
+        <mime-type>application/vnd.jam</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jar</extension>
+        <mime-type>application/java-archive</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>java</extension>
+        <mime-type>text/x-java-source</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jisp</extension>
+        <mime-type>application/vnd.jisp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jlt</extension>
+        <mime-type>application/vnd.hp-jlyt</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jnlp</extension>
+        <mime-type>application/x-java-jnlp-file</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>joda</extension>
+        <mime-type>application/vnd.joost.joda-archive</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpe</extension>
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpeg</extension>
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpg</extension>
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpgm</extension>
+        <mime-type>video/jpm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpgv</extension>
+        <mime-type>video/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpm</extension>
+        <mime-type>video/jpm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>application/javascript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jsf</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>json</extension>
+        <mime-type>application/json</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jsonml</extension>
+        <mime-type>application/jsonml+json</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jspf</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kar</extension>
+        <mime-type>audio/midi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>karbon</extension>
+        <mime-type>application/vnd.kde.karbon</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kfo</extension>
+        <mime-type>application/vnd.kde.kformula</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kia</extension>
+        <mime-type>application/vnd.kidspiration</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kml</extension>
+        <mime-type>application/vnd.google-earth.kml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kmz</extension>
+        <mime-type>application/vnd.google-earth.kmz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kne</extension>
+        <mime-type>application/vnd.kinar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>knp</extension>
+        <mime-type>application/vnd.kinar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kon</extension>
+        <mime-type>application/vnd.kde.kontour</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kpr</extension>
+        <mime-type>application/vnd.kde.kpresenter</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kpt</extension>
+        <mime-type>application/vnd.kde.kpresenter</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kpxx</extension>
+        <mime-type>application/vnd.ds-keypoint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ksp</extension>
+        <mime-type>application/vnd.kde.kspread</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ktr</extension>
+        <mime-type>application/vnd.kahootz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ktx</extension>
+        <mime-type>image/ktx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ktz</extension>
+        <mime-type>application/vnd.kahootz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kwd</extension>
+        <mime-type>application/vnd.kde.kword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>kwt</extension>
+        <mime-type>application/vnd.kde.kword</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lasxml</extension>
+        <mime-type>application/vnd.las.las+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>latex</extension>
+        <mime-type>application/x-latex</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lbd</extension>
+        <mime-type>application/vnd.llamagraphics.life-balance.desktop</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lbe</extension>
+        <mime-type>application/vnd.llamagraphics.life-balance.exchange+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>les</extension>
+        <mime-type>application/vnd.hhe.lesson-player</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lha</extension>
+        <mime-type>application/x-lzh-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>link66</extension>
+        <mime-type>application/vnd.route66.link66+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>list</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>list3820</extension>
+        <mime-type>application/vnd.ibm.modcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>listafp</extension>
+        <mime-type>application/vnd.ibm.modcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lnk</extension>
+        <mime-type>application/x-ms-shortcut</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>log</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lostxml</extension>
+        <mime-type>application/lost+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lrf</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lrm</extension>
+        <mime-type>application/vnd.ms-lrm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ltf</extension>
+        <mime-type>application/vnd.frogans.ltf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lvp</extension>
+        <mime-type>audio/vnd.lucent.voice</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lwp</extension>
+        <mime-type>application/vnd.lotus-wordpro</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>lzh</extension>
+        <mime-type>application/x-lzh-compressed</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m13</extension>
+        <mime-type>application/x-msmediaview</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m14</extension>
+        <mime-type>application/x-msmediaview</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m1v</extension>
+        <mime-type>video/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m21</extension>
+        <mime-type>application/mp21</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m2a</extension>
+        <mime-type>audio/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m2v</extension>
+        <mime-type>video/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m3a</extension>
+        <mime-type>audio/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m3u</extension>
+        <mime-type>audio/x-mpegurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m3u8</extension>
+        <mime-type>application/vnd.apple.mpegurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m4a</extension>
+        <mime-type>audio/mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m4b</extension>
+        <mime-type>audio/mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m4r</extension>
+        <mime-type>audio/mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m4u</extension>
+        <mime-type>video/vnd.mpegurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>m4v</extension>
+        <mime-type>video/mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ma</extension>
+        <mime-type>application/mathematica</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mac</extension>
+        <mime-type>image/x-macpaint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mads</extension>
+        <mime-type>application/mads+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mag</extension>
+        <mime-type>application/vnd.ecowin.chart</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>maker</extension>
+        <mime-type>application/vnd.framemaker</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>man</extension>
+        <mime-type>text/troff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mar</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mathml</extension>
+        <mime-type>application/mathml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mb</extension>
+        <mime-type>application/mathematica</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mbk</extension>
+        <mime-type>application/vnd.mobius.mbk</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mbox</extension>
+        <mime-type>application/mbox</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mc1</extension>
+        <mime-type>application/vnd.medcalcdata</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mcd</extension>
+        <mime-type>application/vnd.mcd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mcurl</extension>
+        <mime-type>text/vnd.curl.mcurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mdb</extension>
+        <mime-type>application/x-msaccess</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mdi</extension>
+        <mime-type>image/vnd.ms-modi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>me</extension>
+        <mime-type>text/troff</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mesh</extension>
+        <mime-type>model/mesh</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>meta4</extension>
+        <mime-type>application/metalink4+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>metalink</extension>
+        <mime-type>application/metalink+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mets</extension>
+        <mime-type>application/mets+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mfm</extension>
+        <mime-type>application/vnd.mfmp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mft</extension>
+        <mime-type>application/rpki-manifest</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mgp</extension>
+        <mime-type>application/vnd.osgeo.mapguide.package</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mgz</extension>
+        <mime-type>application/vnd.proteus.magazine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mid</extension>
+        <mime-type>audio/midi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>midi</extension>
+        <mime-type>audio/midi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mie</extension>
+        <mime-type>application/x-mie</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mif</extension>
+        <mime-type>application/x-mif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mime</extension>
+        <mime-type>message/rfc822</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mj2</extension>
+        <mime-type>video/mj2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mjp2</extension>
+        <mime-type>video/mj2</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mk3d</extension>
+        <mime-type>video/x-matroska</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mka</extension>
+        <mime-type>audio/x-matroska</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mks</extension>
+        <mime-type>video/x-matroska</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mkv</extension>
+        <mime-type>video/x-matroska</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mlp</extension>
+        <mime-type>application/vnd.dolby.mlp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mmd</extension>
+        <mime-type>application/vnd.chipnuts.karaoke-mmd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mmf</extension>
+        <mime-type>application/vnd.smaf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mmr</extension>
+        <mime-type>image/vnd.fujixerox.edmics-mmr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mng</extension>
+        <mime-type>video/x-mng</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mny</extension>
+        <mime-type>application/x-msmoney</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mobi</extension>
+        <mime-type>application/x-mobipocket-ebook</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mods</extension>
+        <mime-type>application/mods+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mov</extension>
+        <mime-type>video/quicktime</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>movie</extension>
+        <mime-type>video/x-sgi-movie</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mp1</extension>
+        <mime-type>audio/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mp2</extension>
+        <mime-type>audio/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mp21</extension>
+        <mime-type>application/mp21</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mp2a</extension>
+        <mime-type>audio/mpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>mp3</extension>
+        <mime-type>aA[›+ãND8Á,Şa?‚	‘ÃHŒş oµds.ò,2ì¡0_õs©Öb-ğ¡W`‰ ié
+Ì=…qvÇµ a—&ß2Vøú‘<Pñíwd :­4ú¹}ÀXÔì+–jPÒZ½µY¨……e¬Lu*ÊŞ äâp“N«‘‰ÃÈm8¸9}¦„ª&à~bÖ­°e"Ñ7PŞ¬ÍC¼¹ezK–µybfT÷:K½"EyåÑºD‹x5Ô±şx)ƒ#]##|G½”ipeJM¤å²İûà]±píñf9æ|Òú,+ñº)‚ö@!Ø™% Ø1ÆçJ!àPƒ†Ô¼ÈÅğfúŒF3aéÌ“v9Ú$$g~n~m™k)q„ÎZAo¦PT¡’°ü¾b|LfÈQh“´o4{û :R(îc4h ú†Ù$Âƒ¡C!§vãÂVÚWºßŒë.6Ğ„]JH7Ş6“¨Å1ÃF¾f:'ïÃÉ-lPÚ­(&.¢^Ø'ˆGJLËæn‹‘ÏÎ˜©½	ñFq”ıDdë‘ïqÈœ¢ÃÜËüİa‰e7¨µÍ¥£[ÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°«ÒXë‰Ë F4ã¥«Ü	R®>¸÷'õPĞÏŒ‚9Öß6íÒ®;„HÚ÷¯‡D_Ùk•V‚µjã¡¡Õ;¨îÓğRô¢iÜbOK	ÀÖ~ÀKI,™’uf†í¦eÀ¡ÿğ©„âF¯«Í³Õî2W¢£>6Òíàn°èŠ­ğy™÷m4õ²Ñ»~äè‚…D„m„Z×.g a#`x·0Ñƒeˆ©zQ.ızf¤WmÉ>GdSUué]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹æ!¹íìş!ãˆk÷$‚­7èÎUWê@ğ¨µ-ïk§&Å´]2ˆä³ñ?|œ±ÿ`êw\<Õ ô¤ê“ƒ ]]õ¡–PÅ×B»ï³‚J}é3¤ìĞ>3ÄôSk!’’¯A"»*¢wQÓ.EiWm®.3åÊº+{Ù‚¿¶Ç.ƒ:{“jW´¹«ƒ!åšmºûŞ	˜n«ûÁw	rƒŸªG‰éÃñ¾J?3˜\õÏ¼Õ¡›‰î°Åk‰_; ã†Öë³•ÑöékMUâ©œ\>P®°İ'°­5Èìãw++‰­_Sr S¥È®kÆéTæ‰t†È©}¼—n‹¬È/Qç˜sx1ï®€Èë˜_‚–/oQXìù§éª‹ØlY|¨¼ô´Ò€ryÒı ¶¶“v?Å¤3Óè9¾=Ô„°¾òO,‰e„á¦Á¥Ë;‡[$gâ›>Ã¤è=­yß¿»V'En€Ë;®İ¦/éWÂ|·2rnrÉ·³.ºÆ§ŠÊ¯!DõáRü”¡4õ®kÍ'Åè¬Fv3°¤şl
+.£YRa·g)EöI8	…`Fo;è	+²k£÷Sgî;Ì*k`6´Ïëˆâz®ÕÏvY·xQ	©tËƒ†Ó\ëç	E=WhÇÔ¼ëº•ÆÙº;/ğ±Ux­ëÉà1¯h™t@\bö5¬õ
+¼Š	ynŞÈYÂ#MÅªØBŞƒ(¼¶=Ù’/İtñLr¡$ŸL‡^ÏSÚe—ûé•VåkŸşÙGOŠn>~ÒöáùohfQ›…Ò·Êæ0g‚hÎ˜å]ÚáÄn©­n˜T´qÆ%_Ğ2=üxÁé—-V®	l¥ú@ÕMIX(_©¸îÃ
+/¥aj¬Ô‘Ô¯“M­ƒ+¾ÿ4Šqæ±G:!æï2^¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İ€”İv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtT¾@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡%û9ƒ’48_·õ† s»y4·‚ûƒÈÕá+Q÷ı5„eôHŞ¾O€>)z’D²m&ó´r¤¢-\˜§7È1]óº{Sœ”Á'&£ƒj¡I=1¤†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'eğ2@İ)½‡¥Èç`È‚cA`wĞ@(³'¥±Ú³$¡uá~„<É-<Ê4JÛ­gĞØ2$† İ¸òsê²˜$_ß²h°’Ó&³É4oã½iDƒĞÏØj1#0ã{èß´'Ş/Åh²²ôyáµ‡„Vû;]rÚêÒËÈ¨Ö
+$åxÒ*a!\Še/ÇïÎNóóœëŞæeæ•m‹fİê(KŠÒ›|¥j³ëõ@è¡ok?cÕOÃi‚{(C%”„ƒiÀÁ˜ƒ)+Âí¦¨Lˆ×Wä¤Îv¨|Dû:éaÿ¦#p2f
+<"·şİ8ØByF“9¨Tyï{uV)iÅ~Ô{]ºK)Ù¯B0l¶"ÑÓ’Ù!yoº6YÛVæçA=O'ŒLE×;ÏÙôøl Èşuë:Ü=_Æ{{Šİ
+R²»@t:j6W¢mLn–Àö‰Ô¥€~«ÀĞ‚ïÒæ!í¡ê;¶QXuÉv{0ç‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥Ÿ£âuµwMH‡ºğ#êŒ$!b…w¿õ±+’—lÉÉt­chÖg;~¦`7Aô'5À~	:o4²3#×‚şáYmáfº«wn*`ğËÔ7möğ½NW8<à_¬D+«Ò+>Ş~
+d Ãôn·Åc­cÿRŸ2)ê}8Ïk»ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Â¾\²]ˆCÑx ½1^7ûÚ·…¼Çk'¦š§şÚÍè¢ÓŞÑíW›á“h¾f'uÛì¯!˜‘¸pk¿8
+×t«{EçŠôÒ÷Ã­ÍŸM1m&-ò3Z€Ñ÷¥¨b3Ú•1OÕöë‰½õà9Ó'ë0ë”×`mÂCÎé¢¨ uµ|ãŠâ†™k£­ˆˆœbwÓEhcæXé,é¹–Â »ä˜åÊÆ!‰-	í¹Î%;ïWvg«Éè£ÎJY6jS‰$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×$æ	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBQ—s4Qz”¶XÏÇ~Î6üÎ&ÖÃùê=Ék…!¯õL"Yï\Î¹Ã'à·ûA'ó-^%2õ,UC ğ =§Çq¬6™ŒOÃ…3DI’•°TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨l˜RWƒ’‡ÍXú®7J—?=2×¹µÒ{¶I|mß¹áMê\Ù¬½¡ÜbXqx´ğš|ÄÍ¸Û°ŸáƒóùcûnèPˆ1·­Çô#ÿlæù2ã£.]´Ó™¬v{éê[$(–¸Ib^m“Û/Ÿİ£€«5òÚSàNï²>$ÛPzfe;Í†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%z»ö°bF»?S„¾Z„îQy8é¬£lZp˜ºñ­|b÷k`“°U÷í¾„~YÆìihìİ{k’¶q¾×ôÖT”İFgDØüáíh‹>9¡¡øĞ&|SK¢7Ïó‚ªTÈå“Ë4!ÚıÒ)[gB%ù T ã8j\3ş
+£×GöPıÚ{Î#R8—ëı¯ ¬Ëê 7œI„ıŠìÛì+k7ô8ÃoîÆM(Oô…â/õÉ—_¹hò#2:ØÂŠH´‡Ğ%o„Nsˆ
+(Ÿ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90×D1ŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[}/Àš^¾‰İ¶æjm‚j¨¡ŸGlîĞG	e+{w_É˜,#¸ô+û”ìÀS¯y2Ò”Â§ŒÇEPG-¶{[~0§xæù¸7ÀsıQy	:ùıÁÒZ°¢O}\9©˜,eKÆØõkvÍÔ3äö@¨ÕÁ Æn1Ğ1gçÅşŞêEDf›¨}•²P*S‹Ô>$F))–$œòoë·¤ï-§BšÒ¥wèØ¢Ça4ÊÆˆ±¢÷§¦ÏÂ!—·ÍîOÇÙÕìáš#Ş´…–ÔD·É¯fˆº»Öf?æwå—ÇÊù«u³¥«ø¦š ·•Åt—ÅtáœZõ¯_‹, 6(İT¾±æàrßB-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~ónƒ‡±¾TWø™µ|z¾·ˆnçİÂ\Î¯Q,Û\›;“ú`˜)^ÏşÚÖ4å´s.!0_ïmˆf~mŠßôZd `ÏõT‰T ÃT¡d±Ê™B/ˆ·0ˆ&¡9H«¸¤aEFÜåÔ¤‚*%hÃ;*3!?ÈI«li³Íu&!ñ‚Š [ÉfÒ})ƒÂQÜ‚	’0ãn"’=‚*}mÈî±ØC›-Ã}ş*”»–÷"âš¦G¢,–±ó’²+µ_s7mG»½ÊÌW»èö‘ù †×.³«É^–D…½Ñ¦^ïjìAßËo‹‡;lªZù .{MÈWÚîlüÅ_Ì–¡.Æ§š6b||ë5ƒ»áê5®°WïÑ{vI8Oõã
+˜šR8OJ’B=csĞÈş#=áù;B›Ä²_ÕBÄU#„ª]$¤ØX°+±¬·o€kHQ@!û€ŠÍqpã£O7ô¦Ó1½ğµõàÉêÎ=@§­0dÉÍ6Ü9såˆ1¤m×OÏ·bSˆ˜oå1úäHëŞAA|Ì"‡ğm ëcJd¼+D+T' aÙnÛX¦˜Øšr¤¡í”—"sÚ÷‚^°)î
+Ô±Ú°æÌø¢›)Ä+–kM/€­!¯«hæ ­å ¨Z]Õ#z^8‚¥s	ÀÔÎªÅÂ°L±(ÅShÕ•Ã]ÂßÅ o>/$‚2çs;¶„Úç&h]b#/ p~½Ëîè1Ş ¡Ñ°ÀÅ²ÃÅ¢\%ÛC:Ğ’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ì«“‡éÀIŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±Ô—ìâ"¦çBöC…Œ&Æİs\û%ÍÉÈ>½_èNvFä5‰€‹µİŠ‰Ú7µ•›y2‹&W`vÅĞHYLZ±‰üÕ5¤d­6cßæà°uHŠ=‘ ‡§Ë= Ô¥ÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\1+“ÍhLşTüîª¦ô¦£PÙÀö•;5ıVm´£F]¤¿„[È¢W>ëÀò<2ËR©+ìíòÙo–ÍKÉ6íÀ‰\·}~¢°sWä‰SÕ"R~™¡l÷—4¥ÀJËÎ«Ô™ŠèX”®XEe|uK+ÏGÈX¾á'Œ…·wÖ›Ç&´3Sv˜Y„'\”Ç}—ŸâcÑ‰6kúËéV¬®?`•s‘ï\‡ìÙµôã"Og?èôÜûƒ³,å ç¨ŒF ï å™ÊÏ×‡ç×R|tğl^OµUİô<«ĞD7Ûù<3cÖÎÄY´L¬}h³@3¡“§u´zçB…Ù8çê$ãk»ÊçøîıBÌWÔú8Å&Y=wãÅ.ëhÚ(‰ÅÓ2¶eLsÂ¯u½y«-üF¯6[ÜF›¤Õû¥z¤O,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-<ˆbÕ•ã·’,Ô„Àûs\ø{¨Â±gyÑ†´4îåø[‘:\Á½q"»´S®ÕI­Ò½m¶vªfê…ëñYJt>Â»vB¬ğ§«‡·û?I¯ó5»¥—H«ÊÔ/İV}ÖE[ºòŞğm÷>?fk6kI÷”‘Õ£À_\jãÌ©ê?cmñÜÍİ¿ØøĞ²Ãæƒ[¯ïk	Æ¹x.’èüG@ğ¯E!ªı#÷&Êø
+Ğ÷!áÿ2Â@}_dD”h%dEéŸ‡ş»©&Â‰*$ĞË§-<m*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûK­øåş»Ö|Èi-+§üÒşÇÆÛ˜Ï¦À@@7/'ø]ã«—Æ6vÆ.Ö&´¶¦v~·îWfûŞh©¨ÆÕ_µ€ù®Å(êw‘øW¿73$Úß‡ğ_Õ•xu</extension>
+        <mime-type>video/vnd.mpegurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>n-gage</ +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKnokia.n-gage.symb:Ğ’.install</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>n3</extension>
+        <mime-type>²>$ÛPn3</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nb</extension>
+        <mime-type>application/mathematica</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nbİ8ØByF“9¨Tyï{uV)iÅ~Ô{]ºK)Ù¯B0l¶"ÑÓ’Ù!yowolfram.player</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nc</extension>
+        <mime-type>application/x-netcdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nI’•°TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨x-dtbnI’æƒ[¯ïk	Æ¹x.’èüG@ğ¯E!ªı#÷&Êø
+Ğ÷!áÿ2Â@}_dD”h%dEéŸ‡ş»©&Â‰*$ĞË§-nfo</extension>
+        <mime-type>text/x-nfo</k	Æ¹x.’èüG@ğ¯E!ªı#÷&Êø
+Ğ÷!áÿ2Â@}_dD”h%dEéŸ‡ş»©&Â‰*$ĞË§-ngda‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿnokia.n-gage.data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nitf</extension>
+        <mime-type>application/vnd.nitf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nlu</extension>
+        <mime-type>application/vnd.neu”İFanguage.nlu</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±Ô—ìenlive’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ìnn 7œI„ıŠìÛì+k7ô8ÃoîÆM(Oô…â/õÉ—_¹hò#2:ØÂŠH´‡Ğnoblenet-director$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×nnm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKnoblenet-sealer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nnw</extension>
+        <mime-type>–‘Uù±µNn¹ûKnoblenet-web</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>npx</extension>
+        <mime-type>image/vnd.net-fpx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nsc</extension>
+        <mime-type>application/x-conference</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nsf</extension>
+        <mime-type>application/vnd.lotus-notes</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ntf</extension>
+        <mime-type>application/vnd.nitf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>nzÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\nzÒÆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oa2</extension>
+        <mime-type>a#2:ØÂŠH´‡Ğ%ujitsu.oasysÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âoa3</extension>
+        <mime-type>application/H´‡Ğ%ujitsu.oasys3</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oas</extension>
+        <mime-type>application/H´‡Ğ%ujitsu.oasys</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>obd</extension>
+        <mime-type>application/•\1binder</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>obj</extension>
+        <mime-type>application/•\tgif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oda</extension>
+        <mime-type>application/oda</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Database -->
+        <extension>odÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.oasis.opendocument.database</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Chart -->
+        <extension>odé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹oasis.opendocument.chart</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Formula -->
+        <extension>odf</extension>
+        <mime-type>application/vnd.oasis.opendocument.formula</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>odf‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿoasis.opendocument.formula-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Drawing -->
+        <extension>od@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡oasis.opendocument.graphics</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Image -->
+        <extension>odi</extension>
+        <mime-type>application/vnd.oasis.opendocument.image</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Master Document -->
+        <extension>od†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'eğ2@oasis.opendocument.text-master</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Present^¿Ó°' -->
+        <extension>odp</extension>
+        <mime-type>application/vnd.oasis.opendocument.present^¿Ó°'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Spreadsheet -->
+        <extension>ods</extension>
+        <mime-type>application/H´‡Ğoasis.opendocument.spreadsheet</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Text -->
+        <extension>od‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿoasis.opendocument.text</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>o^¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İogİv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtogİv’Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İogİv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtogÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°ogİv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éT!-- xiph Q¹ˆÒ àŠs -->
+        <extension>ogx</extension>
+        <mime-type>application/ogİv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtomdoc</extension>
+        <mime-type>application/omdocæƒ[¯ïk	Æ¹x.’èüG@ğ¯E!ªı#÷&Êø
+Ğ÷!áÿ2Â@}_dD”h%dEéŸ‡ş»©&Â‰*$ĞË§-one¾@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(onenoèÎUWê@ğ¨µ-ïk§&Å´]2ˆä³ñ?|œ±ÿ`êw\<Õ ô¤ê“ƒ ]]õ¡–PÅ×B»ï³‚J}é3¤ìĞ>3ÄôSonetmp</extension>
+        <mime-type>application/onenoèÎUWê@ğ¨µ-ïk§&Å´]2ˆä³ñ?|œ±ÿ`êw\<Õ ô¤ê“ƒ ]]õ¡–PÅ×B»ï³‚J}é3¤ìĞ>3ÄôSonetoc</extension>
+        <mime-type>application/onenoèÎUWê@ğ¨µ-ïk§&Å´]2ˆä³ñ?|œ±ÿ`êw\<Õ ô¤ê“ƒ ]]õ¡–PÅ×B»ï³‚J}é3¤ìĞ>3ÄôSonetoc2</extension>
+        <mime-type>a#2:ØÂŠonenoèÎUWê@ğ¨µ-ïk§&Å´]2ˆä³ñ?|œ±ÿ`êw\<Õ ô¤ê“ƒ ]]õ¡–PÅ×B»ï³‚J}é3¤ìĞ>3ÄôSopf</extension>
+        <mime-type>a#2:ØÂŠoebps-package+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>opml</extension>
+        <mime-type>text/x-opml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>opæ	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBvnd.palm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>or@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡lotus-or@anizer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>osf</extension>
+        <mime-type>application/vnd.yamaha.openscoreformat</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>osfpv@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡yamaha.openscoreformat.osfpv@+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oté]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹oasis.opendocument.chart-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>otf</extension>
+        <mime-type>font/otf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Drawing Template -->
+        <extension>ot@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡oasis.opendocument.graphics-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- HTML Document Template -->
+        <extension>oth</extension>
+        <mime-type>application/ğ2@oasis.opendocument.text-web</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oti</extension>
+        <mime-type>application/vnd.oasis.opendocument.image-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Present^¿Ó°' Template -->
+        <extension>otp</extension>
+        <mime-type>application/vnd.oasis.opendocument.present^¿Ó°'-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Spreadsheet Template -->
+        <extension>ots</extension>
+        <mime-type>application/H´‡Ğoasis.opendocument.spreadsheet-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- OpenDocument Text Template -->
+        <extension>ot‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿoasis.opendocument.text-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>oxps</extension>
+        <mime-type>application/oxps</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ox‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿopenofficeor@.ª»[«Pû›»</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p</extension>
+        <mime-type>text/x-pascal</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p10</extension>
+        <mime-type>application/pkcs10</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p12</extension>
+        <mime-type>a#2:ØÂŠx-pkcs1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âp7ÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\pkcs7-!ãˆk÷$‚­7èÎs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p7é]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀpkcs7-ÍØ°r</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p7†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'epkcs7-ÍØ°r</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p7r</extension>
+        <mime-type>application/•\pkcs7-!ãˆkreqresp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p7s</extension>
+        <mime-type>application/pkcs7-signaturr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p8</extension>
+        <mime-type>application/pkcs8</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pas</extension>
+        <mime-type>text/x-pascal</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>paw</extension>
+        <mime-type>–‘Uù±µNn¹ûKpawaafile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pbd</extension>
+        <mime-type>application/vnd.powerbuilder6</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pb†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+image/x-portable-bitmap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pcap</extension>
+        <mime-type>application/vnd.tcpdump.pcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pcf</extension>
+        <mime-type>application/x-font-pcf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pcĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±Ô—ìhp-pcĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pcĞO,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-<ˆbÕhp-pcĞxĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pc‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îimage/piMH‡ºğ#êŒ$!b…w¿õ±+’—lÉÉt­chÖg;~¦`7Aô'5À~	:o4²3#×‚şáYmáfº«wn*`ğËÔ7mpcurl</extension>
+        <mime-type>!ê¨…¸B'.5-<ˆbÕcurl.pcurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pI’•°TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔimage/x-pcx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pdÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.palm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pdf</extension>
+        <mime-type>application/pdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pfa</extension>
+        <mime-type>application/x-font-type1</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pfÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\font-type1</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pf†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'e•\font-type1</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pfr</extension>
+        <mime-type>application/font-tdpfr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pf’•°TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨x-pkcs1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âpgm</extension>
+        <mime-type>image/x-portable-graymap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pgß´'Ş/Åh²²ôyáµ‡„Vû;]rÚêÒËÈ¨Ö
+$åxÒ*a!\Šx-chess-pgß´'mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pgp</extension>
+        <mime-type>application/pgp-encryptŸ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90piM*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îimage/piMH‡ºğ#êŒ$!b…w¿õ±+’—lÉÉt­chÖg;~¦`7Aô'5À~	:o4²3#×‚şáYmáfº«wn*`ğËÔ7mpic‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îimage/piMH‡ºğ#êŒ$!b…w¿õ±+’—lÉÉt­chÖg;~¦`7Aô'5À~	:o4²3#×‚şáYmáfº«wn*`ğËÔ7mp@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pki</extension>
+        <mime-type>application/pkixcmp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pkipath</extension>
+        <mime-type>application/pkix-pkipath</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>plÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.3gpp.pic-bw-large</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>plé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹æ!,–±ó’plé]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>plf</extension>
+        <mime-type>application/vnd.pocketlearß´'mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pls</extension>
+        <mime-type>a;®İ¦/éWscpls</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±Ô—ìctc-posml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>png</extension>
+        <mime-type>image/png</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pnm</extension>
+        <mime-type>image/x-portable-anymap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pn‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îimage/x-macpaint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>port¾@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡macportó’port¾@2ömime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>po‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥Ÿ£owerpoint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>po‡m</extension>
+        <mime-type>application/vnd.ms-£owerpoint.templatemacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âpotx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.present^¿Ó°'ml.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ppam</extension>
+        <mime-type>application/vnd.ms-£owerpoint.addinmacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âppd</extension>
+        <mime-type>application/vnd.cups-pp–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90p†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+image/x-portable-pixmap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pps</extension>
+        <mime-type>application/¶t±Ÿ¥Ÿ£owerpoint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ppsm</extension>
+        <mime-type>application/vnd.ms-£owerpoint.slideshowmacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âppsx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.present^¿Ó°'ml.slideshowğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âpp‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥Ÿ£owerpoint</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pp‡m</extension>
+        <mime-type>application/vnd.ms-£owerpoint.present^¿Ó°'macroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âpptx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.present^¿Ó°'ml.present^¿Ó°'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âpqa</extension>
+        <mime-type>application/vnd.palm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pæ	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBx-mobipocket-ebook</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pre</ +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKlotus-freelance</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>prf</extension>
+        <mime-type>application/pics-rulÎs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ps</extension>
+        <mime-type>application/postscript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>psÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.3gpp.pic-bw-small</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>psd</extension>
+        <mime-type>image/vnd.adobe.photoshop</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>psf</extension>
+        <mime-type>application/•\font-linux-p))–$œòoë·¤ï-§BšÒ¥wèØ¢Ça4ÊÆˆ±¢÷§¦ÏÂ!—·ÍîOÇÙÕìáš#Ş´…–ÔD·É¯fˆº»Öf?pskÀIŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯pskÀ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ptid</extension>
+        <mime-type>application/vnd.pvi.ptid1</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>puÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\1pulisher</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>p¥ÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.3gpp.pic-bw-var</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pwß´'Ş/Åh²²ôyáµ‡„Vû;]rÚêÒËÈ¨Ö
+$åxÒ*a!\Še/3m.post-it-notes</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>py¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İvnd.ms-£layready.+“Íh.py¥;mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>pyÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°vnd.ms-£layready.+“Íh.pyv;mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qam</extension>
+        <mime-type>application/vnd.*S‹Ô>$quickani°r</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qbo</extension>
+        <mime-type>application/vnd.intu.qbo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qf’•°TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨vnd.intu.qfx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qps</extension>
+        <mime-type>application/¶t±Ÿpulishare-delta-tree</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>q‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îvideo/quicktime</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qti</extension>
+        <mime-type>image/x-quicktime</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qtif</extension>
+        <mime-type>image/x-quicktime</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qwd</extension>
+        <mime-type>application/vnd.quark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qw‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿquark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qxÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.quark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qxd</extension>
+        <mime-type>application/vnd.quark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qO,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-<ˆbÕquark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>qO‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿquark.quarkxpress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>re„á¦Á¥Ë;‡[$gâ›>Ã¤è=­yß¿»V'En€Ë;®İ¦/éWpn-realË;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rem</extension>
+        <mime-type>a;®İ¦/éWpn-realË;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rer</extension>
+        <mime-type>application/•\rer-compressŸ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90ras</extension>
+        <mime-type>image/x-cmu\rester</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90rcprofile</TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨vnd.ipunplugged.rcprofile</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90rdf</extension>
+        <mime-type>application/rdf+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rdz</extension>
+        <mime-type>application/vnd.data-vision.rdz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rep</extension>
+        <mime-type>application/vnd.businessobµwMHs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>res</extension>
+        <mime-type>application/x-dtbresource+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rgÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2image/x-rgÒÆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rif</extension>
+        <mime-type>application/reginfo+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rip</extension>
+        <mime-type>aó \İvnd.rip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ris</extension>
+        <mime-type>application/x-research-info-systems</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>r,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-resource-lists+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rlé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zºimage/vnd.fujixerox.edmics-rlé]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rld</extension>
+        <mime-type>application/resource-lists-diff+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rm</extension>
+        <mime-type>application/vnd.rn-real+“Íh</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rmi</extension>
+        <mime-type>audio/midi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rmp</extension>
+        <mime-type>a;®İ¦/éWpn-realË;®İ¦-plugi'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âr™¬v{éê[$(–¸Ib^m“Û/Ÿİ£€«5òÚSàNïapplication/vnd.jcp.javame.midlet-rms</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rÔ¥ÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.rn-real+“Íh-vbr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90rnc</extension>
+        <mime-type>application/relax-ng-compact-syntax</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>roa</extension>
+        <mime-type>application/rpki-roa</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>roff</extension>
+        <mime-type>²>$ÛPzfe;Í†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%rp9</extension>
+        <mime-type>application/vnd.cloanto.rp9</"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%rpsm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKnokia.ra®İ¦-preseHs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rps‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿnokia.ra®İ¦-preseH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>r1ŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[}/Àš^¾‰İ¶sparql-quer$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×rm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNrls-{k’¶ices+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rsd</extension>
+        <mime-type>–‘Uù±µNrsd+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rsm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNrss+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rtf</extension>
+        <mime-type>application/rtf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>rtx</extension>
+        <mime-type>²>$ÛPrichtext</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>s</extension>
+        <mime-type>text/x-asm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>s3m</extension>
+        <mime-type>a;®İ¦/s3m</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>saf</extension>
+        <mime-type>application/vnd.yamaha.smaf-Ë;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sbŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯sbŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sc</extension>
+        <mime-type>application/¾f'uÛì¯!secure-container</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90scd</extension>
+        <mime-type>application/•\1schedule</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90scm</extension>
+        <mime-type>application/vnd.lotus-screencam</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sc1ŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[}/Àš^¾‰İ¶scvp-cv-request</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>scm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNscvp-cv-response</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>scurl</extension>
+        <mime-type>text/<ˆbÕcurl.scurl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sda</extension>
+        <mime-type>application/<ˆbÕstardivision.drawğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âsdé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹stardivision.calé]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sdd</extension>
+        <mime-type>application/vnd.stardivision.impress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sdkd</extension>
+        <mime-type>application/vnd.solent.sdkm+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sdkm</extension>
+        <mime-type>application/vnd.solent.sdkm+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sdp</extension>
+        <mime-type>application/sdp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sdw</extension>
+        <mime-type>–‘Uù±µNn¹ûKstardivision.writer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90see</TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨vnd.seemail</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sê 7œI„ıŠìÛì+k7ô8ÃoîÆM(Oô…â/õÉ—_¹hò#2:ØÂŠH´‡Ğ%o„Ns
+(Ÿ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90sema</TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨vnd.sema</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>semd</extension>
+        <mime-type>application/vnd.semd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>semf</extension>
+        <mime-type>application/vnd.semf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ser</extension>
+        <mime-type>application/java-{k’ialized-obµwMH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>setk¿8
+×extension>
+        <mime-type>application/set-k¿8ment-initi^¿Ó°'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âsetre@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(set-registr^¿Ó°'-initi^¿Ó°'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âsfd-hdstx</extension>
+        <mime-type>application/vnd.hydrost^¿Óx.sof-data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sfm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKspotfire.sfm*#mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sfÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼text/x-sfÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sgi</extension>
+        <mime-type>image/sgi</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sg,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-<ˆbÕstardivision.writer-global</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sgm</extension>
+        <mime-type>text/sgml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sgml</extension>
+        <mime-type>text/sgml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sh</extension>
+        <mime-type>application/x-sh</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>shar</extension>
+        <mime-type>application/x-shar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>shf</extension>
+        <mime-type>application/shf+xml</mime-type>
+    </mime-mapping>
+    <!--
+    <mime-mapping>
+        <extension>shtml</extension>
+        <mime-type>text/x-{k’¶q¾-k¿rsed-html</mime-type>
+    </mime-mapping>
+    -->
+    <mime-mapping>
+        <extension>sid</extension>
+        <mime-type>image/x-mrsid-image</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>si@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(pgp-signaturr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>si,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!;®İ¦/silk</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>silo</extension>
+        <mime-type> 6(İT¾±æàrßB-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~sis</extension>
+        <mime-type>application/<ˆbÕsymb:Ğ’.install</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sisx</extension>
+        <mime-type>application/vnd.symb:Ğ’.install</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>si‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>x-{tuffiH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sitx</extension>
+        <mime-type>application/x-{tuffiHx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>skd</extension>
+        <mime-type>application/vnd.koĞ’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ìskm</extension>
+        <mime-type>application/vnd.koĞ’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ìskp</extension>
+        <mime-type>application/vnd.koĞ’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ìsk‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±ŸkoĞ’k£×‰iô)wšİÔ§È(@ú¼ßµW›Ó]©ÙH7@Â1y‹<G´®DG×EËB®{"à,>©ªî—ÊE1E,5>¨YÌi÷Ì¦Ìsld†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'eğ2@ms-£owerpoint.slidemacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âsldx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.present^¿Ó°'ml.slideğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âsl‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ*S‹Ô>$salH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sm</extension>
+        <mime-type>application/vnd.stepmania.stepchart</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>smf</extension>
+        <mime-type>application/vnd.stardivision.math</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>smi</extension>
+        <mime-type>application/smiĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>smi,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/smiĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>smÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°x-{mÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>smzip</extension>
+        <mime-type>application/vnd.stepmania.packageÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sn 7œI„ıŠìÛì+k7ô8ÃoîÆM(Oô…â/õÉ—_¹hò;®İ¦/basié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>snf</extension>
+        <mime-type>application/•\font-snf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>so</extension>
+        <mime-type>application/octet-stream</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sp	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBx-pkcs7-!ãˆk÷$‚­7èÎs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>spf</extension>
+        <mime-type>a#2:ØÂŠvnd.yamaha.smaf-phrase</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sp,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/•\futurrsp,aæàrßB-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~spo‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îtext/<ˆbÕin3ûKspotrßB-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~spp</extension>
+        <mime-type>application/scvp-vp-response</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sp1ŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[}/Àš^¾‰İ¶scvp-vp-request</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>spx</extension>
+        <mime-type>=ó \İogİv’b”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtsq,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/•\sq,Êb”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtsæ	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBx-wais-sourceÊb”[!ñàŠñm¼ûÃ mk‚õ”ÁÁyH´€SÅÖÆäRQ¹ˆÒç>$»²ÖGŸT¼}–e8® éTœ—™!İÂMtsæ‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>x-{ubrip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sruŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[}/Àš^¾‰İ¶sru+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>srx</extension>
+        <mime-type>application/sparql-results+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ssd,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/ssd,+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sse</TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔN»ï®Ü¦U1ğ¨vnd.kodak-descriptor</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ssf</extension>
+        <mime-type>application/vnd.*S‹Ô>$s))–$œòoë·¤ï-§BšÒ¥wèØ¢Ça4ÊÆˆ±¢÷§¦ÏÂ!—·ÍîOÇÙÕìáš#Ş´…–ÔD·É¯fˆº»Öf?ssŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯ssŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>s‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿsailingtracker.track</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>s‡é]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹sun.xml.calé.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>std</extension>
+        <mime-type>application/vnd.sun.xml.draw.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>stf</extension>
+        <mime-type>application/vnd.wt.stf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sti</extension>
+        <mime-type>application/vnd.sun.xml.impress.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>stk</extension>
+        <mime-type>application/hyperst;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>st,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!ê¨…¸B'.5-<ˆbÕms-£ki.st,Êmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>str</extension>
+        <mime-type>application/¶t±Ÿpg.format</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>stw</extension>
+        <mime-type>–‘Uù±µNn¹ûKsun.xml.writer.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>suÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2text/<ˆbÕdvbKsubtitle</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90sus</extension>
+        <mime-type>application/<ˆbÕsus-calendar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>susp</extension>
+        <mime-type>application/vnd.sus-calendar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sv4cpio</extension>
+        <mime-type>application/x-{v4cpio</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sv4cæ	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBx-sv4cæ	Ólmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>své]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹dvbKsk’¶iceÓlmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>svd</extension>
+        <mime-type>application/vnd.svd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sv@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎvimage/sv@+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sv@z</extension>
+        <mime-type>image/sv@+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>swa</extension>
+        <mime-type>application/x-director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>swf</extension>
+        <mime-type>application/•\shockwave-f,aæàrßB-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~swi</extension>
+        <mime-type>application/vnd.aristanetworks.swi</B-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~sxé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹sun.xml.calé</B-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~sxd</extension>
+        <mime-type>application/vnd.sun.xml.draw</B-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~sx@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡sun.xml.writer.global</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sxi</extension>
+        <mime-type>application/vnd.sun.xml.impress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sxm</extension>
+        <mime-type>application/vnd.sun.xml.math</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>sxw</extension>
+        <mime-type>–‘Uù±µNn¹ûKsun.xml.writer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îtext/zfe;Í†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%t3</extension>
+        <mime-type>application/•\t3vm-image</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tagle‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥ynfé</B-ıôøé¯˜F³D íşrC±ß|ÅàïÓ¬ªK)mŠ"´_Rsr«x$(Q7Dv¢ªuÅ.ĞF•˜ŒR0G~tao</extension>
+        <mime-type>application/vnd.tao.intent-module-archive</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tar</extension>
+        <mime-type>application/x-tar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tcap</extension>
+        <mime-type>application/vnd.3gpp2.tcap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tcĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯x-tcĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>teacher</extension>
+        <mime-type>application/n¹ûKsmart.teacher</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tei</extension>
+        <mime-type>application/tei+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>teicorpus</extension>
+        <mime-type>application/tei+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tex</extension>
+        <mime-type>application/x-tex</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>texi</extension>
+        <mime-type>application/x-texinfo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>texinfo</extension>
+        <mime-type>application/x-texinfo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tex‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îtext/plai'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âtfi</extension>
+        <mime-type>application/thraud+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tf†şwŠ}Ú† ß†Yq‡³/ø^©]uìF3€ ³'éu+è¢ë¾‰4^¿Ó°'e•\tex-tf†mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tga</extension>
+        <mime-type>image/x-tga</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>thmx</extension>
+        <mime-type>application/vnd.ms-officetheme</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tif</extension>
+        <mime-type>image/tifÍ†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%tiff</extension>
+        <mime-type>image/tifÍ†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%tmo</extension>
+        <mime-type>application/vnd.tmobile-livetÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>torren‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îè¢ë¾‰4^¿Ó°'e•\bittorren‡*Jmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tp,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/vnd.groove-tool-template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tp‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿtri±Ÿtpt</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tr</extension>
+        <mime-type>text/zfe;Í†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%tre„á¦Á¥Ë;‡[$gâ›>Ã¤è=­yß¿»V'En€ËJÏ4&=Ÿ¦C¤¿>¶t±Ÿtrueapp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>trm</extension>
+        <mime-type>application/•\1terminal</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tsd</extension>
+        <mime-type>–‘Uù±µNtimestamped-data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tsÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼text/tab-separated-valuÎs</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>t‡é]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zºfont/collec¿Ó°'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âttf</extension>
+        <mime-type>font/ttf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tt,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®text/turtle</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90twd</extension>
+        <mime-type>application/vnd.simtech-mindmapper</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>twds</extension>
+        <mime-type>application/<ˆbÕsimtech-mindmapper</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>txd</extension>
+        <mime-type>application/vnd.genom^¿Óx.tuxedo</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>txf</extension>
+        <mime-type>application/vnd.æ!,–±ó’txf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>tx‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îtext/plai'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âu32</extension>
+        <mime-type>application/•\authorware-bi'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂudeÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥•\deian-packageÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ufd</extension>
+        <mime-type>application/vnd.ufdl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ufdl</extension>
+        <mime-type>application/vnd.ufdl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ulw</extension>
+        <mime-type>;®İ¦/basié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ulx</extension>
+        <mime-type>application/x-glulx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>umj</extension>
+        <mime-type>application/vnd.umaji'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂunityweÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.unity</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂuoŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±Ô—ìuoŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uri</extension>
+        <mime-type>text/uri-list</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uris</extension>
+        <mime-type>text/uri-list</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>urls</extension>
+        <mime-type>text/uri-list</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ustar</extension>
+        <mime-type>application/x-ustar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>utz</extension>
+        <mime-type>application/vnd.uiq.theme</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uuŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[text/x-uuencodeğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âuv¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İvnd.dece.Ë;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvd</extension>
+        <mime-type>application/vnd.dece.data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvf</extension>
+        <mime-type>application/vnd.dece.data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uv@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎvimage/vnd.dece.graphié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvh</extension>
+        <mime-type>SJCt°vnd.dece.hd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvi</extension>
+        <mime-type>image/vnd.dece.graphié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvm</extension>
+        <mime-type>SJCt°vnd.dece.mobile]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvp</extension>
+        <mime-type>SJCt°vnd.dece.p–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uvs</extension>
+        <mime-type>SJCt°vnd.dece.s–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uv‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿdece.ttŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvuŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[SJCt°vnd.uvvu.mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°vnd.dece.SJCt°</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uv¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İvnd.dece.Ë;®İ¦</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvd</extension>
+        <mime-type>application/vnd.dece.data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvf</extension>
+        <mime-type>application/vnd.dece.data</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvv@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎvimage/vnd.dece.graphié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvh</extension>
+        <mime-type>SJCt°vnd.dece.hd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvi</extension>
+        <mime-type>image/vnd.dece.graphié]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvm</extension>
+        <mime-type>SJCt°vnd.dece.mobile]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvp</extension>
+        <mime-type>SJCt°vnd.dece.p–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uvvs</extension>
+        <mime-type>SJCt°vnd.dece.s–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uvv‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿdece.ttŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvvuŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[SJCt°vnd.uvvu.mp4</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°vnd.dece.SJCt°</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>uvx</extension>
+        <mime-type>application/vnd.dece.unspecifiŸ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uvz</extension>
+        <mime-type>application/vnd.dece.zip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>ux</extension>
+        <mime-type>application/vnd.dece.unspecifiŸ–‚Ú"BVâ¸Ì©(Ï8´‰iê3]\€^Êp
+|Â<œ„]WuU^Ç,“â2rÙ@ÙrC¼1IR“,]ŒWŠ<c°:$}:šr90uvz</extension>
+        <mime-type>application/vnd.dece.zip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vcard</extension>
+        <mime-type>text/<card</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vcd</extension>
+        <mime-type>application/•\cdlink</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vcf</extension>
+        <mime-type>²>$ÛPx-<card</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vc@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡groove-<card</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vcs</extension>
+        <mime-type>text/x-vcalendar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vcx</extension>
+        <mime-type>application/vnd.vcx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vis</extension>
+        <mime-type>application/<ˆbÕvisionar$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×viÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°vnd.vi°</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>voÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2SJCt°x-ms-voÒÆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>vor</extension>
+        <mime-type>application/n¹ûKstardivision.writer</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90vox</extension>
+        <mime-type>application/x-authorware-bi'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂvrŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q" 6(İTvrŞĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âvsd</extension>
+        <mime-type>–‘Uù±µN<ˆbÕvisio=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âvsf</extension>
+        <mime-type>application/vnd.v))–$œòoë·¤ï-§BšÒ¥wèØ¢Ça4ÊÆˆ±¢÷§¦ÏÂ!—·ÍîOÇÙÕìáš#Ş´…–ÔD·É¯fˆº»Öf?vsm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKvisio=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âvs‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿvisio=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âvsw</extension>
+        <mime-type>–‘Uù±µNn¹ûKvisio=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂvtuŒÔàqGG¡İJ<kÍĞ'ÀŞtÅtv{2÷}A^R¡á‰[ 6(İTv¹ûKvtuŒÔmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~ÂvxŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±oicexŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>w3d</extension>
+        <mime-type>application/•\director</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wad</extension>
+        <mime-type>application/•\doo†mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wasm</extension>
+        <mime-type>application/wasm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>waÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼a;®İ¦/éWwaÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wax</extension>
+        <mime-type>=ó \İx-ms-wax</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- Wireless Bitmap -->
+        <extension>wbmp</extension>
+        <mime-type>image/vnd.wap.wbmp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wbm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKcrit‘Ultools.wbs+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wbxŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯±nd.wap.wbxml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wcm</extension>
+        <mime-type>application/vnd.ms-works</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wdÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.ms-works</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wdp</extension>
+        <mime-type>image/vnd.ms-£hoto=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âweb¥;Ò¡ØnşIµƒıÚ ÉÁ/´M@ºÎÿ<¬/¡r( ì=ó \İwebm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>webm</LáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2SJCt°webm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>webp</extension>
+        <mime-type>image/webp</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>w@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(ş‹¡pmi.widgeH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wg‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>widgeH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wkm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKms-works</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wm</LáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2SJCt°x-ms-wm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wma</TSĞå«B¯ŸüyÖtĞ³¬·04EŸ4€J÷yÔNó \İx-ms-wma</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wmd</extension>
+        <mime-type>application/x-ms-wmd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wmf</extension>
+        <mime-type>application/x-msmetafile]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- WML Source -->
+        <extension>wml</extension>
+        <mime-type>text/±nd.wap.wml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- Compiled WML -->
+        <extension>wmlé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹wap.wmlé]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- WML Script Source -->
+        <extension>wmls</extension>
+        <mime-type>text/im¹wap.wmlscript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <!-- Compiled WML Script -->
+        <extension>wmlsé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹wap.wmlscripté]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wmÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼SJCt°x-ms-wmÑwmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wmx</extension>
+        <mime-type>SJCt°x-ms-wmx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wmz</extension>
+        <mime-type>application/x-msmetafile]gmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>woff</extension>
+        <mime-type>font/we;Í†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%we;Í2</extension>
+        <mime-type>font/we;ÍÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âwpd</extension>
+        <mime-type>–‘Uù±µN<ˆbÕwordperfwMH</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wp,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/vnd.ms-wpl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wpm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKms-works</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wqd</extension>
+        <mime-type>–‘Uù±µN<ˆbÕwqd</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wri</extension>
+        <mime-type>application/x-mswrite</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wrĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q" 6(İTvrŞĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âwsd,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/wsd,+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wspolic8
+×extension>
+        <mime-type>application/wspolic8+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wtÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.webturbo=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âwx</extension>
+        <mime-type>SJCt°x-ms-wvx</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>x32</extension>
+        <mime-type>application/•\authorware-bi'</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âx3d</extension>
+        <mime-type> 6(İTx3d+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>x3dÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2 6(İTx3d+bi'ar$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×x3dz</extension>
+        <mime-type> 6(İTx3d+bi'ar$·R;é@]ïn:H®É}û®=¦™g¿
+ÂàH°Ø±A¶„îrK\m\âR{@O­^Ÿı	áb_ìˆ¾Óò2}‹§K×x3dÑwkVv´ì£¢$úIw¼Èè÷­f
+SßjZZÍ\Ñ´¼ 6(İTx3d+vrŞĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âx3dz</extension>
+        <mime-type> 6(İTx3d+vrŞĞ=ˆmime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <hF‹2¹ÚúÖ~Âx3dz</extension>
+        <mime-type> 6(İTx3d+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xaŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯xaŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xap</extension>
+        <mime-type>application/x-silverlight-app</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xar</extension>
+        <mime-type>application/vnd.xara</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xbap</extension>
+        <mime-type>application/x-ms-xbap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xb 7œI„ıŠìÛì+k7ô8ÃoîÆM(Oô…â/õÉ—_¹hò#2:ØÂŠH´‡Ğ%ujixerox.docuworks.bi'der</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xbm</LáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2image/x-xbitmap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xdf</extension>
+        <mime-type>application/xcap-diff+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xdm</extension>
+        <mime-type>application/vnd.syncml.dm+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xdp</extension>
+        <mime-type>application/vnd.adobe.xdp+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xdssé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀdssé+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xdw</extension>
+        <mime-type>–‘Uù±µNn¹ûK%ujixerox.docuworks</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xen	ÓlgnMõmòÚ8R;ÔjQã¨ Mç@(©7:z’aRÔëTCnãğóXBxen	+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xer</extension>
+        <mime-type>application/patch-ops-error+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xfdf</extension>
+        <mime-type>application/vnd.adobe.xfdf</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xfd,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/vnd.xfdl</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xh‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îè¢ë¾‰4^¿Ó°'e•htŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xhtml</extension>
+        <mime-type>è¢ë¾‰4^¿Ó°'e•htŞĞ+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xhvml</extension>
+        <mime-type>è¢ë¾‰4^¿Ó°'e•v+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xif</extension>
+        <mime-type>image/vnd.xifÍ†E"[÷8¢ø¤¼"ÆU¢}­
+Œ˜ÃJi/¢è¯kâdÉ•îZ‚Óó%ßö‘’’íŒ€á¥¤›‡‘Û¨.¾sÀÉZ÷?%xle„á¦Á¥Ë;‡[$gâ›>Ã¤è=­yß¿»V'En€ËJÏ4&=Ÿ¦C¤¿>¶t±Ÿms-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xlam</extension>
+        <mime-type>application/vnd.ms-excel.addinmacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxlé]g*ÔÖ[-ÆòDÖ'fôUó ¸ÚÍØ°rmC„Zº…{tÍ<iDL7fêÀim¹ms-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xlf</extension>
+        <mime-type>application/x-xliff+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xlm</extension>
+        <mime-type>application/vnd.ms-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xlm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKms-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xlmÒÆLáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2£ô‰‰z/ºÁ¥vnd.ms-excel.sheet.bi'armacroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxlsm</extension>
+        <mime-type>application/vnd.ms-excel.sheet.macroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxlsx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.spreadsheetml.sheetğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxl‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥s-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xltm</extension>
+        <mime-type>application/vnd.ms-excel.template.macroenabled.1ÆğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxltx</extension>
+        <mime-type>application/vnd.openxmlformats-officedocument.spreadsheetml.template</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xlw</extension>
+        <mime-type>JÏ4&=Ÿ¦C¤¿>¶t±Ÿ¥s-excel</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xm</extension>
+        <mime-type>aó \İxm</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xŞĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xo</extension>
+        <mime-type>application/vnd.olpc-sugar</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xop</extension>
+        <mime-type>application/xop+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xpi</extension>
+        <mime-type>application/x-xpinstall</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xpĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯xpro	+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xpm</LáAŒ½—ëâšãÌgòîIcaÒÑ@ÙtÉX{£K2image/x-xpixmap</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xpr</extension>
+        <mime-type>application/vnd.is-xpr</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xpm*# +!*¢¤L'#ú#áãÇx  ]  „ïïAşB–‘Uù±µNn¹ûKms-xpmdocument</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xpw</extension>
+        <mime-type>JÏ4&=Ÿ¦C¤¿>¶t±Ÿintercon.formnetğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~Âxpx</extension>
+        <mime-type>=JÏ4&=Ÿ¦C¤¿>¶t±Ÿintercon.formnetğF‘CßÅr´›”n€÷¥Kd–÷C¡ÇÁ28úäñ„°› Ìà
+gr±'Ó÷Û¸ŞLCGõ¦ìÅÛö‘˜©hF‹2¹ÚúÖ~ÂxsĞ=ˆOGıBÁQˆf‡‡:ƒ¿¡”!h 4C´÷	q"hÌ-`ÑçÀåã×¦¯xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <°:$}:šr90xsl‡*Jª»[«Pû›»ˆ‚jÖ1D© ›Èêù,`á¼A1îiJÏ4&=Ÿ¦C¤¿>xsl‡+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xsm</extension>
+        <mime-type>application/vnd.syncml+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xspf</extension>
+        <mime-type>a#2:ØÂŠxspf+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xu,Êsê%¸8N¿‰‹UËkŒ]Q/ne)íO˜[YdºÜ®!pplication/vnd.mozilla.xu,+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xvm</extension>
+        <mime-type>è¢ë¾‰4^¿Ó°'e•v+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xvml</extension>
+        <mime-type>è¢ë¾‰4^¿Ó°'e•v+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xwd</extension>
+        <mime-type>image/x-xwindowdump</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xyz</extension>
+        <mime-type>chem‘Ul/x-xyz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xz</extension>
+        <mime-type>application/x-xz</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>yan@2ö™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(yan@2ömime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>yi'</™š›«oCÎCúV=Eâ.c«¯®½Ã”ŠÎv.ÍÊƒ/läÄÙ&†(yin+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z</extension>
+        <mime-type>application/x-compress</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z1</extension>
+        <mime-type>application/x-zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z2</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z3</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z4</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z5</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z6</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z7</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>z8</extension>
+        <mime-type>application/•\zmachine</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>zaz</extension>
+        <mime-type>application/vnd.zzazz.deck+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>zip</extension>
+        <mime-type>application/zip</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>zir</extension>
+        <mime-type>application/vnd.zul</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>zirz</extension>
+        <mime-type>application/vnd.zul</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>zmm</extension>
+        <mime-type>application/vnd.handheld-entertainment+xml</mime-type>
+    </mime-mapping>
+
+  <!-- ==================== Default Welcome File List ===================== -->
+  <!-- When a request URI refers to a directory, the default sk’¶let looks  -->
+  <!-- for a "welcome file" within that directory and, if present, to the   -->
+  <!-- corresponding resource URI for display.                              -->
+  <!-- If no welcome files are present, the default sk’¶let either sk’¶es a -->
+  <!-- directory listing (see default sk’¶let configuration on how to       -->
+  <!-- customize) or returns a 404 status, depending on the valuÎ of the    -->
+  <!-- listings sktting.                                                    -->
+  <!--                                                                      -->
+  <!-- If you define welcome files in your own application's web.xml        -->
+  <!-- deployment descriptor, that list *replaces* the list configured      -->
+  <!-- here, so be sure to include any of the default valuÎs that you wish  -->
+  <!-- to use within your application.                                       -->
+
+    <welcome-file-list>
+        <welcome-file>i'dex.html</welcome-file>
+        <welcome-file>i'dex.htm</welcome-file>
+        <welcome-file>i'dex.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
